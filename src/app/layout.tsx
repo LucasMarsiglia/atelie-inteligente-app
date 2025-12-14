@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Ateliê Inteligente - Plataforma para Ceramistas",
-  description: "Crie catálogos profissionais e receba encomendas personalizadas",
+  description: "Crie, compartilhe e venda suas peças de cerâmica com inteligência artificial",
 };
 
 export default function RootLayout({
