@@ -2,52 +2,100 @@
 
 export type UserType = 'ceramista' | 'comprador';
 
-export type OrderStatus = 'pendente' | 'aceito' | 'recusado' | 'em_producao' | 'concluido';
+export type SubscriptionStatus = 'active' | 'canceled' | 'pending';
+
+export type PieceAvailability = 'em_estoque' | 'sob_encomenda';
+
+export type OrderStatus = 'recebido' | 'em_producao' | 'pronto' | 'enviado' | 'entregue';
+
+export type PaymentMethod = 'pix' | 'cartao' | 'boleto';
 
 export interface User {
   id: string;
-  name: string;
   email: string;
+  name: string;
   type: UserType;
-  avatar?: string;
-  createdAt: Date;
-}
-
-export interface Ceramista extends User {
-  type: 'ceramista';
-  bio?: string;
-  location?: string;
-  phone?: string;
-  instagram?: string;
-  specialties?: string[];
-}
-
-export interface Comprador extends User {
-  type: 'comprador';
-  phone?: string;
-  address?: string;
+  subscriptionStatus?: SubscriptionStatus;
+  subscriptionDate?: string;
+  createdAt: string;
 }
 
 export interface Piece {
   id: string;
   ceramistaId: string;
-  title: string;
-  description: string;
-  images: string[];
-  category?: string;
-  price?: number;
-  available: boolean;
-  createdAt: Date;
+  slug: string;
+  name: string;
+  dimensions: {
+    height: number;
+    width: number;
+    depth: number;
+  };
+  material: string;
+  finish: string;
+  photo?: string;
+  availability: PieceAvailability;
+  quantity?: number;
+  deliveryDays?: number;
+  price: number;
+  
+  // Gerado automaticamente
+  optimizedTitle: string;
+  shortDescription: string;
+  longDescription: string;
+  technicalSheet: string;
+  suggestedPrice: number;
+  instagramText: string;
+  whatsappText: string;
+  
+  status: 'active' | 'sold' | 'inactive';
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Order {
   id: string;
-  compradorId: string;
+  pieceId: string;
   ceramistaId: string;
-  pieceId?: string;
-  description: string;
-  customDetails?: string;
+  
+  // Dados do comprador
+  buyerName: string;
+  buyerEmail: string;
+  buyerPhone: string;
+  buyerAddress: {
+    street: string;
+    number: string;
+    complement?: string;
+    neighborhood: string;
+    city: string;
+    state: string;
+    zipCode: string;
+  };
+  
+  // Dados do pedido
+  paymentMethod: PaymentMethod;
+  customization?: string;
+  requiresDeposit: boolean;
+  depositAmount?: number;
+  
   status: OrderStatus;
-  createdAt: Date;
-  updatedAt: Date;
+  trackingCode?: string;
+  notes?: string;
+  
+  totalAmount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MessageTemplate {
+  type: 'pedido_recebido' | 'em_producao' | 'pronto' | 'enviado' | 'rastreamento';
+  subject: string;
+  emailBody: string;
+  whatsappBody: string;
+}
+
+export interface ShareContent {
+  instagramPost: string;
+  instagramStory: string;
+  whatsappMessage: string;
+  publicUrl: string;
 }
