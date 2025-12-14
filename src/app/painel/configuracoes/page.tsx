@@ -10,7 +10,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ArrowLeft, QrCode, Download, MessageSquare, CheckCircle, Settings, Link2, Copy, Users, ExternalLink, Trash2 } from 'lucide-react';
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
+
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
