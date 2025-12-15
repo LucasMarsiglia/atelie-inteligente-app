@@ -8,37 +8,56 @@ module.exports = {
   ],
   theme: {
     extend: {
+      // 🎯 SEÇÃO DE BORDAS SUAVES
+      // Usa a variável --radius do seu CSS global
+      borderRadius: {
+        lg: `var(--radius)`,
+        md: `calc(var(--radius) - 2px)`, // rounded-md
+        sm: `calc(var(--radius) - 4px)`, // rounded-sm
+      },
+      
       colors: {
-        // --- CORES ESSENCIAIS PARA RESOLVER O ERRO ---
-        'background': 'hsl(var(--background))', // Note: Usando 'hsl(var(--...))' para maior compatibilidade se oklch falhar
+        // Mapeamento de TODAS as variáveis de cor para o Tailwind.
+        // É crucial que você mapeie todas as variáveis para usar as classes do Tailwind.
+        'background': 'hsl(var(--background))',
         'foreground': 'hsl(var(--foreground))', 
-        'border': 'hsl(var(--border))', // Essencial para o erro anterior (border-border)
-        'ring': 'hsl(var(--ring))',     // Essencial para o erro anterior (outline-ring/50)
+        'border': 'hsl(var(--border))', 
+        'ring': 'hsl(var(--ring))',
 
-        // --- ADICIONE TODAS AS OUTRAS CORES AQUI ---
         'primary': 'hsl(var(--primary))',
+        'primary-foreground': 'hsl(var(--primary-foreground))',
         'secondary': 'hsl(var(--secondary))',
+        'secondary-foreground': 'hsl(var(--secondary-foreground))',
         'muted': 'hsl(var(--muted))',
+        'muted-foreground': 'hsl(var(--muted-foreground))',
         'accent': 'hsl(var(--accent))',
+        'accent-foreground': 'hsl(var(--accent-foreground))',
         'destructive': 'hsl(var(--destructive))',
         'card': 'hsl(var(--card))',
+        'card-foreground': 'hsl(var(--card-foreground))',
         'popover': 'hsl(var(--popover))',
+        'popover-foreground': 'hsl(var(--popover-foreground))',
         'input': 'hsl(var(--input))',
         
-        // Exemplo de como você adicionaria as cores de sidebar/chart
+        // Cores de Sidebar e Chart
+        'chart-1': 'hsl(var(--chart-1))',
+        'chart-2': 'hsl(var(--chart-2))',
+        'chart-3': 'hsl(var(--chart-3))',
+        'chart-4': 'hsl(var(--chart-4))',
+        'chart-5': 'hsl(var(--chart-5))',
         'sidebar': 'hsl(var(--sidebar))',
-        // 'chart-1': 'hsl(var(--chart-1))', 
-        // ...
+        'sidebar-foreground': 'hsl(var(--sidebar-foreground))',
+        'sidebar-primary': 'hsl(var(--sidebar-primary))',
+        'sidebar-primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+        'sidebar-accent': 'hsl(var(--sidebar-accent))',
+        'sidebar-accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+        'sidebar-border': 'hsl(var(--sidebar-border))',
+        'sidebar-ring': 'hsl(var(--sidebar-ring))',
       },
-      // Se você estiver usando as configurações de fonte do /lib/fonts.ts:
-      // fontFamily: {
-      //   'geist-sans': ['var(--font-geist-sans)'],
-      //   // ...
-      // }
     },
   },
   plugins: [
-    // Se você usa o tw-animate-css como plugin (e não CSS puro), ele deve vir aqui.
+    // Se você quiser usar tw-animate-css (provavelmente o 'tailwindcss-animate'), adicione-o aqui:
     // require('tailwindcss-animate'), 
   ],
 };

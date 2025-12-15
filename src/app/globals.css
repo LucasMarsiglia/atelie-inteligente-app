@@ -1,13 +1,8 @@
+/* ARQUIVO CSS GLOBAL LIMPO */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* * LINHAS REMOVIDAS POIS ERAM SINTAXE INVÁLIDA NO CSS/TAILWIND:
- * @import "tailwindcss";
- * @import "tw-animate-css";
- * @custom-variant dark (&:is(.dark *));
- * @theme inline { ... }
- */
 
 :root {
   --radius: 0.625rem;
@@ -88,7 +83,9 @@
 
 @layer base {
   * {
-    @apply border; 
+    /* Esta linha aplica a cor da borda e o anel de foco */
+    @apply border-border outline-ring/50;
+    /* A borda suave será aplicada com classes do Tailwind como rounded-lg */
   }
   body {
     @apply bg-background text-foreground;
