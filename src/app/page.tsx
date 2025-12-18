@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Palette, ShoppingBag, Sparkles } from 'lucide-react';
+import { Palette, ShoppingBag, Sparkles, Mail } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 
 export default function Home() {
@@ -17,19 +17,17 @@ export default function Home() {
   const [name, setName] = useState('');
   const [accountType, setAccountType] = useState<'ceramista' | 'comprador'>('ceramista');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
     
-    // Verificar sessão existente no Supabase
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        
         if (session?.user) {
-          // Buscar dados do perfil do usuário
           const { data: profile } = await supabase
             .from('profiles')
             .select('*')
@@ -37,142 +35,122 @@ export default function Home() {
             .single();
           
           if (profile) {
-            // Redirecionar baseado no plano
-            if (profile.plan === 'pro' || profile.plan === 'premium') {
-              router.push('/painel');
-            } else {
-              router.push('/assinar');
-            }
+            router.push(profile.plan === 'pro' || profile.plan === 'premium' ? '/painel' : '/assinar');
           }
         }
       } catch (error) {
         console.error('Erro ao verificar sessão:', error);
       }
     };
-
     checkSession();
   }, [router]);
+
+  // Função para recuperar senha
+  const handleForgotPassword = async () => {
+    setError('');
+    setSuccessMessage('');
+    if (!email) {
+      setError('Por favor, digite seu e-mail para recuperar a senha.');
+      return;
+    }
+    setLoading(true);
+    try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-pass`,
+      });
+      if (resetError) {
+        setError(resetError.message);
+      } else {
+        setSuccessMessage('E-mail de recuperação enviado! Verifique sua caixa de entrada.');
+      }
+    } catch (err) {
+      setError('Erro ao processar solicitação.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setSuccessMessage('');
     setLoading(true);
-    
-    // Validação básica
-    if (!email || !password) {
-      setError('Por favor, preencha todos os campos.');
-      setLoading(false);
-      return;
-    }
     
     try {
       if (isLogin) {
-        // LOGIN com Supabase Auth
+        // --- FLUXO DE LOGIN ---
         const { data, error: loginError } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         
         if (loginError) {
-          if (loginError.message.includes('Invalid login credentials')) {
-            setError('E-mail ou senha incorretos. Tente novamente.');
-          } else {
-            setError('Erro ao fazer login. Tente novamente.');
-          }
+          setError(loginError.message.includes('Email not confirmed') 
+            ? 'Por favor, confirme seu e-mail antes de entrar.' 
+            : 'E-mail ou senha incorretos.');
           setLoading(false);
           return;
         }
         
         if (data.user) {
-          // Buscar perfil do usuário
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', data.user.id)
-            .single();
-          
+          const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).single();
           if (profile) {
-            // Redirecionar baseado no plano
-            if (profile.plan === 'pro' || profile.plan === 'premium') {
-              router.push('/painel');
-            } else {
-              router.push('/assinar');
-            }
+            router.push(profile.plan === 'pro' || profile.plan === 'premium' ? '/painel' : '/assinar');
           }
         }
       } else {
-        // CADASTRO com Supabase Auth
+        // --- FLUXO DE CADASTRO ---
         if (!name) {
           setError('Por favor, preencha seu nome.');
           setLoading(false);
           return;
         }
         
-        // Criar usuário no Supabase Auth
         const { data, error: signupError } = await supabase.auth.signUp({
           email,
           password,
-          options: {
-            data: {
-              full_name: name,
-              account_type: accountType,
-            }
-          }
+          options: { data: { full_name: name, account_type: accountType } }
         });
         
         if (signupError) {
-          if (signupError.message.includes('already registered')) {
-            setError('Este e-mail já está cadastrado. Faça login.');
-          } else if (signupError.message.includes('Password')) {
-            setError('A senha deve ter pelo menos 6 caracteres.');
-          } else {
-            setError(`Erro ao criar conta: ${signupError.message}`);
-          }
+          setError(signupError.message);
           setLoading(false);
           return;
         }
         
         if (data.user) {
-          // Criar perfil do usuário na tabela profiles
-          const { error: profileError } = await supabase
-            .from('profiles')
-            .insert({
-              id: data.user.id,
-              email: email,
-              full_name: name,
-              plan: 'free',
-              created_at: new Date().toISOString(),
-            });
+          await supabase.from('profiles').insert({
+            id: data.user.id,
+            email: email,
+            full_name: name,
+            plan: 'free',
+            created_at: new Date().toISOString(),
+          });
           
-          if (profileError) {
-            console.error('Erro ao criar perfil:', profileError);
-            // Não mostrar erro ao usuário, pois a conta foi criada com sucesso
-          }
+          // Mensagem clara de confirmação necessária
+          setSuccessMessage('Conta criada! 📧 Enviamos um link de confirmação para seu e-mail. Você precisa confirmar para ativar sua conta.');
           
-          // Mostrar mensagem de sucesso
-          setError('');
-          alert('Conta criada com sucesso! Faça login para continuar.');
-          setIsLogin(true);
+          // Limpa campos e volta para login após um tempo
           setEmail('');
           setPassword('');
           setName('');
+          setTimeout(() => {
+            setIsLogin(true);
+            setSuccessMessage('Após clicar no link enviado ao seu e-mail, faça login aqui.');
+          }, 8000);
         }
       }
     } catch (err) {
-      console.error('Erro ao processar autenticação:', err);
       setError('Erro ao processar. Tente novamente.');
     } finally {
       setLoading(false);
     }
   };
 
-  if (!isClient) {
-    return null;
-  }
+  if (!isClient) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50 text-left">
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -186,56 +164,24 @@ export default function Home() {
 
       <main className="container mx-auto px-4 py-12">
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-6xl mx-auto">
-          {/* Hero Section */}
           <div className="space-y-6">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-full text-sm font-medium">
               <Sparkles className="w-4 h-4" />
               Plataforma para Ceramistas
             </div>
-            
             <h1 className="text-5xl font-bold leading-tight">
-              Transforme sua arte em{' '}
-              <span className="bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">
-                negócio digital
-              </span>
+              Transforme sua arte em <span className="bg-gradient-to-r from-orange-600 to-pink-600 bg-clip-text text-transparent">negócio digital</span>
             </h1>
-            
             <p className="text-xl text-gray-600">
-              Crie catálogos profissionais, gere textos para redes sociais automaticamente 
-              e gerencie seus pedidos em um só lugar.
+              Crie catálogos profissionais, gere textos para redes sociais e gerencie pedidos em um só lugar.
             </p>
-
-            <div className="grid grid-cols-2 gap-4 pt-4">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center flex-shrink-0">
-                  <Palette className="w-5 h-5 text-orange-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Catálogo Inteligente</h3>
-                  <p className="text-sm text-gray-600">Textos gerados por IA</p>
-                </div>
-              </div>
-              
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center flex-shrink-0">
-                  <ShoppingBag className="w-5 h-5 text-pink-600" />
-                </div>
-                <div>
-                  <h3 className="font-semibold">Gestão de Pedidos</h3>
-                  <p className="text-sm text-gray-600">Controle total</p>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Login/Signup Card */}
           <Card className="shadow-2xl">
             <CardHeader>
               <CardTitle>{isLogin ? 'Entrar' : 'Criar Conta'}</CardTitle>
               <CardDescription>
-                {isLogin 
-                  ? 'Acesse sua conta para continuar' 
-                  : 'Comece a vender suas peças hoje'}
+                {isLogin ? 'Acesse sua conta para continuar' : 'Comece a vender suas peças hoje'}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -244,48 +190,18 @@ export default function Home() {
                   <>
                     <div className="space-y-2">
                       <Label htmlFor="name">Nome</Label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Seu nome"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                        disabled={loading}
-                      />
+                      <Input id="name" placeholder="Seu nome" value={name} onChange={(e) => setName(e.target.value)} required disabled={loading} />
                     </div>
-                    
                     <div className="space-y-2">
                       <Label>Tipo de Conta</Label>
                       <div className="grid grid-cols-2 gap-3">
-                        <button
-                          type="button"
-                          onClick={() => setAccountType('ceramista')}
-                          disabled={loading}
-                          className={`p-4 rounded-lg border-2 transition-all ${
-                            accountType === 'ceramista'
-                              ? 'border-orange-600 bg-orange-50'
-                              : 'border-gray-200 hover:border-gray-300'
-                          } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
+                        <button type="button" onClick={() => setAccountType('ceramista')} className={`p-4 rounded-lg border-2 transition-all ${accountType === 'ceramista' ? 'border-orange-600 bg-orange-50' : 'border-gray-200'}`}>
                           <Palette className="w-6 h-6 mx-auto mb-2 text-orange-600" />
                           <div className="font-semibold text-sm">Ceramista</div>
-                          <div className="text-xs text-gray-600">Vender peças</div>
                         </button>
-                        
-                        <button
-                          type="button"
-                          onClick={() => setAccountType('comprador')}
-                          disabled={loading}
-                          className={`p-4 rounded-lg border-2 transition-all ${
-                            accountType === 'comprador'
-                              ? 'border-pink-600 bg-pink-50'
-                              : 'border-gray-200 hover:border-gray-300'
-                          } ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
+                        <button type="button" onClick={() => setAccountType('comprador')} className={`p-4 rounded-lg border-2 transition-all ${accountType === 'comprador' ? 'border-pink-600 bg-pink-50' : 'border-gray-200'}`}>
                           <ShoppingBag className="w-6 h-6 mx-auto mb-2 text-pink-600" />
                           <div className="font-semibold text-sm">Comprador</div>
-                          <div className="text-xs text-gray-600">Comprar peças</div>
                         </button>
                       </div>
                     </div>
@@ -294,32 +210,19 @@ export default function Home() {
                 
                 <div className="space-y-2">
                   <Label htmlFor="email">E-mail</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="seu@email.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                    disabled={loading}
-                  />
+                  <Input id="email" type="email" placeholder="seu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loading} />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password">Senha</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                    disabled={loading}
-                    minLength={6}
-                  />
-                  {!isLogin && (
-                    <p className="text-xs text-gray-500">Mínimo de 6 caracteres</p>
-                  )}
+                  <div className="flex justify-between items-center">
+                    <Label htmlFor="password">Senha</Label>
+                    {isLogin && (
+                      <button type="button" onClick={handleForgotPassword} className="text-xs text-orange-600 hover:underline" disabled={loading}>
+                        Esqueci a senha
+                      </button>
+                    )}
+                  </div>
+                  <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={loading} minLength={6} />
                 </div>
 
                 {error && (
@@ -328,24 +231,19 @@ export default function Home() {
                   </div>
                 )}
 
-                <Button 
-                  type="submit" 
-                  className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700"
-                  disabled={loading}
-                >
+                {successMessage && (
+                  <div className="p-4 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 text-sm flex items-start gap-3">
+                    <Mail className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                    <span>{successMessage}</span>
+                  </div>
+                )}
+
+                <Button type="submit" className="w-full bg-gradient-to-r from-orange-600 to-pink-600" disabled={loading}>
                   {loading ? 'Processando...' : (isLogin ? 'Entrar' : 'Criar Conta')}
                 </Button>
 
-                <div className="text-center text-sm">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsLogin(!isLogin);
-                      setError('');
-                    }}
-                    disabled={loading}
-                    className="text-orange-600 hover:underline disabled:opacity-50"
-                  >
+                <div className="text-center text-sm pt-2">
+                  <button type="button" onClick={() => { setIsLogin(!isLogin); setError(''); setSuccessMessage(''); }} className="text-orange-600 hover:underline">
                     {isLogin ? 'Não tem conta? Criar agora' : 'Já tem conta? Entrar'}
                   </button>
                 </div>
@@ -354,45 +252,27 @@ export default function Home() {
           </Card>
         </div>
 
-        {/* Features */}
         <div className="mt-24 grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           <div className="text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-pink-500 mx-auto flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-white" />
-            </div>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-500 to-pink-500 mx-auto flex items-center justify-center"><Sparkles className="w-8 h-8 text-white" /></div>
             <h3 className="text-xl font-semibold">IA Integrada</h3>
-            <p className="text-gray-600">
-              Textos profissionais gerados automaticamente para suas peças
-            </p>
+            <p className="text-gray-600">Textos profissionais gerados automaticamente para suas peças</p>
           </div>
-          
           <div className="text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 mx-auto flex items-center justify-center">
-              <ShoppingBag className="w-8 h-8 text-white" />
-            </div>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 mx-auto flex items-center justify-center"><ShoppingBag className="w-8 h-8 text-white" /></div>
             <h3 className="text-xl font-semibold">Vendas Simplificadas</h3>
-            <p className="text-gray-600">
-              Checkout integrado e gestão completa de pedidos
-            </p>
+            <p className="text-gray-600">Checkout integrado e gestão completa de pedidos</p>
           </div>
-          
           <div className="text-center space-y-3">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto flex items-center justify-center">
-              <Palette className="w-8 h-8 text-white" />
-            </div>
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 mx-auto flex items-center justify-center"><Palette className="w-8 h-8 text-white" /></div>
             <h3 className="text-xl font-semibold">Páginas Públicas</h3>
-            <p className="text-gray-600">
-              Compartilhe suas peças no Instagram e WhatsApp facilmente
-            </p>
+            <p className="text-gray-600">Compartilhe suas peças no Instagram e WhatsApp facilmente</p>
           </div>
         </div>
       </main>
 
-      {/* Footer */}
-      <footer className="border-t mt-24 py-8 bg-white/50">
-        <div className="container mx-auto px-4 text-center text-gray-600">
-          <p>© 2024 Ateliê Inteligente - Transformando arte em negócio</p>
-        </div>
+      <footer className="border-t mt-24 py-8 bg-white/50 text-center text-gray-600">
+        <p>© 2024 Ateliê Inteligente - Transformando arte em negócio</p>
       </footer>
     </div>
   );
