@@ -34,9 +34,12 @@ export default function Home() {
             .eq('id', session.user.id)
             .single();
           
+          console.log('Perfil do usuário:', profile);
+          localStorage.setItem('atelie_user', JSON.stringify(profile))
           if (profile) {
             router.push(profile.plan === 'pro' || profile.plan === 'premium' ? '/painel' : '/assinar');
           }
+
         }
       } catch (error) {
         console.error('Erro ao verificar sessão:', error);
