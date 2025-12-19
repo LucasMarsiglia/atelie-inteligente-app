@@ -26,10 +26,10 @@ export default function PainelPage() {
     
     const parsedUser = JSON.parse(userData);
     
-    if (parsedUser.type !== 'ceramista') {
-      router.push('/catalogo');
-      return;
-    }
+    // if (parsedUser.type !== 'ceramista') {
+    //   router.push('/catalogo');
+    //   return;
+    // }
     
     if (parsedUser.subscriptionStatus !== 'active') {
       router.push('/assinar');
