@@ -27,37 +27,37 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
+  // useEffect(() => {
+  //   setIsClient(true);
 
-    const checkSession = async () => {
-      try {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-        if (session?.user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+  //   const checkSession = async () => {
+  //     try {
+  //       const {
+  //         data: { session },
+  //       } = await supabase.auth.getSession();
+  //       if (session?.user) {
+  //         const { data: profile } = await supabase
+  //           .from('profiles')
+  //           .select('*')
+  //           .eq('id', session.user.id)
+  //           .single();
 
-          console.log('Perfil do usuário:', profile);
-          localStorage.setItem('atelie_user', JSON.stringify(profile));
-          if (profile) {
-            router.push(
-              profile.plan === 'pro' || profile.plan === 'premium'
-                ? '/painel'
-                : '/assinar'
-            );
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao verificar sessão:', error);
-      }
-    };
-    checkSession();
-  }, [router]);
+  //         console.log('Perfil do usuário:', profile);
+  //         localStorage.setItem('atelie_user', JSON.stringify(profile));
+  //         if (profile) {
+  //           router.push(
+  //             profile.plan === 'pro' || profile.plan === 'premium'
+  //               ? '/painel'
+  //               : '/assinar'
+  //           );
+  //         }
+  //       }
+  //     } catch (error) {
+  //       console.error('Erro ao verificar sessão:', error);
+  //     }
+  //   };
+  //   checkSession();
+  // }, [router]);
 
   // Função para recuperar senha
   const handleForgotPassword = async () => {
@@ -110,20 +110,20 @@ export default function Home() {
           return;
         }
 
-        if (data.user) {
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', data.user.id)
-            .single();
-          if (profile) {
-            router.push(
-              profile.plan === 'pro' || profile.plan === 'premium'
-                ? '/painel'
-                : '/assinar'
-            );
-          }
-        }
+        // if (data.user) {
+        //   const { data: profile } = await supabase
+        //     .from('profiles')
+        //     .select('*')
+        //     .eq('id', data.user.id)
+        //     .single();
+        //   if (profile) {
+        //     router.push(
+        //       profile.plan === 'pro' || profile.plan === 'premium'
+        //         ? '/painel'
+        //         : '/assinar'
+        //     );
+        //   }
+        // }
       } else {
         // --- FLUXO DE CADASTRO ---
         if (!name) {

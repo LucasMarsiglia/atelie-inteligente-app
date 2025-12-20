@@ -54,7 +54,11 @@ export function SignInForm() {
       </Button>
 
       <div className="text-center text-sm pt-2">
-        <Link href="#" type="button" className="text-orange-600 hover:underline">
+        <Link
+          href="/auth/sign-up"
+          type="button"
+          className="text-orange-600 hover:underline"
+        >
           {true ? 'Não tem conta? Criar agora' : 'Já tem conta? Entrar'}
         </Link>
       </div>
