@@ -1,12 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/core/utils/lib/supabase';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Palette, Lock } from 'lucide-react';
 
 export default function ResetPasswordPage() {
@@ -18,7 +24,7 @@ export default function ResetPasswordPage() {
   async function handleUpdatePassword(e: React.FormEvent) {
     e.preventDefault();
     setError('');
-    
+
     if (newPassword.length < 6) {
       setError('A nova senha deve ter pelo menos 6 caracteres.');
       return;
@@ -26,14 +32,14 @@ export default function ResetPasswordPage() {
 
     setLoading(true);
     const { error } = await supabase.auth.updateUser({
-      password: newPassword
+      password: newPassword,
     });
 
     if (error) {
       setError(error.message);
       setLoading(false);
     } else {
-      alert("Senha atualizada com sucesso!");
+      alert('Senha atualizada com sucesso!');
       router.push('/');
     }
   }
@@ -41,7 +47,6 @@ export default function ResetPasswordPage() {
   return (
     // Removido qualquer limite de largura do container pai para o bg ocupar tudo
     <div className="min-h-screen w-full bg-gradient-to-br from-orange-50 via-white to-pink-50 flex flex-col">
-      
       {/* Header ocupando 100% da largura */}
       <header className="w-full border-b bg-white/80 backdrop-blur-sm">
         <div className="w-full max-w-7xl mx-auto px-4 py-4 flex items-center justify-center md:justify-start">
@@ -72,12 +77,12 @@ export default function ResetPasswordPage() {
             <form onSubmit={handleUpdatePassword} className="space-y-4">
               <div className="space-y-2 text-left">
                 <Label htmlFor="password">Nova Senha</Label>
-                <Input 
+                <Input
                   id="password"
-                  type="password" 
-                  placeholder="••••••••" 
-                  value={newPassword} 
-                  onChange={(e) => setNewPassword(e.target.value)} 
+                  type="password"
+                  placeholder="••••••••"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
                   required
                   disabled={loading}
                   className="focus-visible:ring-orange-500"
@@ -90,9 +95,9 @@ export default function ResetPasswordPage() {
                 </div>
               )}
 
-              <Button 
-                type="submit" 
-                className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 transition-all shadow-md" 
+              <Button
+                type="submit"
+                className="w-full bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700 transition-all shadow-md"
                 disabled={loading}
               >
                 {loading ? 'Salvando...' : 'Atualizar Senha'}
