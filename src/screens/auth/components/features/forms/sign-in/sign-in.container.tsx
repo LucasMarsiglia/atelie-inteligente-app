@@ -24,14 +24,13 @@ export function useSignInContainer() {
   const handleSubmitForm: SubmitHandler<SignInSchemaType> = async (formData) => {
     setIsLoading(true);
     try {
-      const { data, error: loginError } = await supabase.auth.signInWithPassword({
+      const { error: loginError } = await supabase.auth.signInWithPassword({
         email: formData.email,
         password: formData.password,
       });
 
       if (loginError) throw new Error(loginError.message);
 
-      setCookie('access_token', data.session?.access_token);
       router.push('/painel');
     } catch (error) {
       toast.error('Erro ao entrar. Verifique suas credenciais e tente novamente.');
