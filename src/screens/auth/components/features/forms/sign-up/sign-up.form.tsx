@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { AccountType } from '../../../shared/account-type/account-type';
 import { FormControl } from '@/components/ui/form';
 import { Controller } from 'react-hook-form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Palette, ShoppingBag } from 'lucide-react';
 
 export function SignUpForm() {
   const { form, handleSubmitForm, isLoading } = useSignUpContainer();
@@ -34,11 +36,13 @@ export function SignUpForm() {
                 name="ceramista"
                 onSelectType={() => form.setValue('accountType', 'ceramista')}
                 selectType={field.value}
+                icon={<Palette className="w-6 h-6 mx-auto mb-2 text-orange-600" />}
               />
               <AccountType
                 name="comprador"
                 onSelectType={() => form.setValue('accountType', 'comprador')}
                 selectType={field.value}
+                icon={<ShoppingBag className="w-6 h-6 mx-auto mb-2 text-pink-600" />}
               />
             </>
           )}
@@ -69,6 +73,31 @@ export function SignUpForm() {
         error={form.formState.errors.password?.message}
         disabled={isLoading}
       />
+
+      <Label className="text-sm text-gray-500 max-w-md">
+        <div className="flex items-start gap-2">
+          <Checkbox
+            checked={form.watch('termsOfUse')}
+            onCheckedChange={(checked) => form.setValue('termsOfUse', checked as boolean)}
+            className="mt-1"
+          />
+          <p className="flex flex-wrap gap-1">
+            Li e estou de acordo com os{' '}
+            <Link href="/docs/terms-of-use" className="text-orange-600 hover:underline">
+              Termos de Serviço
+            </Link>{' '}
+            e a{' '}
+            <Link href="/docs/privacy-policy" className="text-orange-600 hover:underline">
+              Política de Privacidade
+            </Link>
+            .
+          </p>
+        </div>
+      </Label>
+
+      {form.formState.errors.termsOfUse && (
+        <p className="text-sm text-red-600">{form.formState.errors.termsOfUse.message}</p>
+      )}
 
       <Button
         type="submit"
