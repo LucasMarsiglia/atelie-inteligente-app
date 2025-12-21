@@ -1,29 +1,32 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createClient } from './core/utils/lib/server';
 
-const publicRoutes = ['/', '/auth/sign-in', '/auth/sign-up'];
+const authRoutes = ['/auth/sign-in', '/auth/sign-up'];
+const publicRoutes = ['/'];
+const privateRedirect = '/painel';
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req.nextUrl.pathname;
-  const isPublicRoute = publicRoutes.includes(path);
 
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await (await supabase).auth.getUser();
+  } = await supabase.auth.getUser();
 
-  if (isPublicRoute) {
-    return res;
+  const isAuthRoute = authRoutes.includes(path);
+  const isPublicRoute = publicRoutes.includes(path);
+
+  if (user && isAuthRoute) {
+    return NextResponse.redirect(new URL(privateRedirect, req.url));
   }
 
-  if (!user) {
-    const redirectUrl = new URL('/auth/sign-in', req.url);
-    return NextResponse.redirect(redirectUrl);
+  if (!user && !isAuthRoute && !isPublicRoute) {
+    return NextResponse.redirect(new URL('/auth/sign-in', req.url));
   }
 
-  return NextResponse.next();
+  return res;
 }
 
 export const config = {

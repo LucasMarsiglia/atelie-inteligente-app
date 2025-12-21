@@ -32,7 +32,6 @@ export default function RootLayout({
       <head>{/* <Script src="/lasy-bridge.js" strategy="beforeInteractive" /> */}</head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
-
         <ToastContainer
           position="top-right"
           autoClose={5000}
