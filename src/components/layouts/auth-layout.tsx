@@ -46,7 +46,7 @@ export function AuthLayout({ children }: IAuthLayoutProps) {
             </div>
             <h3 className="text-xl font-semibold">Vendas Simplificadas</h3>
             <p className="text-gray-600">
-              Checkout integrado e gestão completa de pedidos
+              Recebimento de encomenda e gestão de pedidos em um só lugar
             </p>
           </div>
           <div className="text-center space-y-3">
