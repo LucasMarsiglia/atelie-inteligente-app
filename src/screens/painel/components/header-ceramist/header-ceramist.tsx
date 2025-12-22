@@ -4,7 +4,7 @@ import { Header } from '@/components/common/header/header';
 import { Button } from '@/components/ui/button';
 import { LogOut, Settings } from 'lucide-react';
 import { useHeaderCeramistContainer } from './header-ceramist-container';
-import { NameSkeleton } from '../shared/name-skeleton/name-skeeleton';
+import { NameSkeleton } from '@/components/common/skeletons/name-skeleton';
 
 export function HeaderCeramist() {
   const { router, handleLogout, user, isLoadingUser } = useHeaderCeramistContainer();
