@@ -1,4 +1,4 @@
-import { Header } from '@/components/header/header';
+import { Header } from '@/components/common/header/header';
 
 export function PrivacyPolicyScreen() {
   return (
@@ -9,17 +9,16 @@ export function PrivacyPolicyScreen() {
         <h2 className="text-xl font-semibold mb-4">Ateliê Inteligente</h2>
         <p className="text-gray-600 mb-6">Última atualização: //__</p>
         <p className="mb-4">
-          O Ateliê Inteligente respeita a sua privacidade e está comprometido com a
-          proteção dos dados pessoais dos usuários, em conformidade com a Lei Geral de
-          Proteção de Dados (LGPD – Lei nº 13.709/2018).
+          O Ateliê Inteligente respeita a sua privacidade e está comprometido com a proteção dos
+          dados pessoais dos usuários, em conformidade com a Lei Geral de Proteção de Dados (LGPD –
+          Lei nº 13.709/2018).
         </p>
 
         <ol className="list-decimal list-inside space-y-4">
           <li>
             <strong>Quais dados coletamos</strong>
             <p className="mt-2">
-              Coletamos apenas os dados necessários para o funcionamento do aplicativo,
-              incluindo:
+              Coletamos apenas os dados necessários para o funcionamento do aplicativo, incluindo:
             </p>
             <ul className="list-disc list-inside ml-6 mt-1 space-y-1">
               <li>Nome</li>
@@ -43,9 +42,9 @@ export function PrivacyPolicyScreen() {
           <li>
             <strong>Armazenamento e segurança</strong>
             <p className="mt-2">
-              Os dados são armazenados em infraestrutura segura, utilizando serviços de
-              terceiros confiáveis. Adotamos medidas técnicas para proteger as informações
-              contra acessos não autorizados, perda ou uso indevido.
+              Os dados são armazenados em infraestrutura segura, utilizando serviços de terceiros
+              confiáveis. Adotamos medidas técnicas para proteger as informações contra acessos não
+              autorizados, perda ou uso indevido.
             </p>
           </li>
 
@@ -69,24 +68,23 @@ export function PrivacyPolicyScreen() {
               <li>Excluir sua conta da plataforma</li>
             </ul>
             <p className="mt-1">
-              Solicitações podem ser feitas pelo próprio aplicativo ou pelo e-mail de
-              suporte.
+              Solicitações podem ser feitas pelo próprio aplicativo ou pelo e-mail de suporte.
             </p>
           </li>
 
           <li>
             <strong>Exclusão de dados</strong>
             <p className="mt-2">
-              Ao solicitar a exclusão da conta, os dados pessoais do usuário serão
-              removidos, respeitando obrigações legais aplicáveis.
+              Ao solicitar a exclusão da conta, os dados pessoais do usuário serão removidos,
+              respeitando obrigações legais aplicáveis.
             </p>
           </li>
 
           <li>
             <strong>Alterações nesta política</strong>
             <p className="mt-2">
-              Esta Política de Privacidade pode ser atualizada a qualquer momento. A
-              versão mais recente estará sempre disponível no aplicativo.
+              Esta Política de Privacidade pode ser atualizada a qualquer momento. A versão mais
+              recente estará sempre disponível no aplicativo.
             </p>
           </li>
 
@@ -95,10 +93,7 @@ export function PrivacyPolicyScreen() {
             <p className="mt-2">
               Em caso de dúvidas, entre em contato pelo e-mail: <br />
               📧{' '}
-              <a
-                href="mailto:suporte@atelieinteligente.com"
-                className="text-blue-600 underline"
-              >
+              <a href="mailto:suporte@atelieinteligente.com" className="text-blue-600 underline">
                 suporte@atelieinteligente.com
               </a>
             </p>

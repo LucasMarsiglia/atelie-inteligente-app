@@ -3,13 +3,7 @@
 import { useEffect, useEffectEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Palette,
   Package,
@@ -22,7 +16,8 @@ import {
 } from 'lucide-react';
 import router from 'next/router';
 import { supabase } from '@/core/utils/lib/supabase';
-import { Header } from '@/components/header/header';
+import { Header } from '@/components/common/header/header';
+import { HeaderCeramist } from './components/header-ceramist/header-ceramist';
 
 export function PainelScreen() {
   const router = useRouter();
@@ -34,18 +29,6 @@ export function PainelScreen() {
     pedidosTotal: 0,
     encomendasRecebidas: 0,
   });
-
-  useEffect(() => {
-    const getUserData = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-
-    getUserData();
-  }, []);
-  console.log('User in painel:', user);
 
   // useEffect(() => {
   //   const userData = localStorage.getItem('atelie_user');
@@ -93,10 +76,11 @@ export function PainelScreen() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
-      <Header />
+      <HeaderCeramist />
+
       <main className="container mx-auto px-4 py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">Painel do {user?.email}</h1>
+          <h1 className="text-3xl font-bold mb-2">Painel do Ceramista</h1>
           <p className="text-gray-600">Gerencie suas peças e pedidos em um só lugar</p>
         </div>
 
@@ -142,9 +126,7 @@ export function PainelScreen() {
           >
             <CardHeader className="pb-3">
               <CardDescription>Peças Ativas</CardDescription>
-              <CardTitle className="text-3xl text-green-600">
-                {stats.pecasAtivas}
-              </CardTitle>
+              <CardTitle className="text-3xl text-green-600">{stats.pecasAtivas}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-sm text-gray-600">Disponíveis para venda</div>
@@ -154,9 +136,7 @@ export function PainelScreen() {
           <Card>
             <CardHeader className="pb-3">
               <CardDescription>Pedidos Pendentes</CardDescription>
-              <CardTitle className="text-3xl text-orange-600">
-                {stats.pedidosPendentes}
-              </CardTitle>
+              <CardTitle className="text-3xl text-orange-600">{stats.pedidosPendentes}</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-sm text-gray-600">Aguardando ação</div>
@@ -187,9 +167,7 @@ export function PainelScreen() {
                 <Package className="w-6 h-6 text-white" />
               </div>
               <CardTitle>Gerenciar Peças</CardTitle>
-              <CardDescription>
-                Crie, edite e organize seu catálogo de peças
-              </CardDescription>
+              <CardDescription>Crie, edite e organize seu catálogo de peças</CardDescription>
             </CardHeader>
             <CardContent>
               <Button
@@ -214,9 +192,7 @@ export function PainelScreen() {
                 <ShoppingCart className="w-6 h-6 text-white" />
               </div>
               <CardTitle>Gerenciar Pedidos</CardTitle>
-              <CardDescription>
-                Pedidos feitos diretamente no seu catálogo
-              </CardDescription>
+              <CardDescription>Pedidos feitos diretamente no seu catálogo</CardDescription>
             </CardHeader>
             <CardContent>
               <Button className="w-full" variant="outline">
@@ -234,9 +210,7 @@ export function PainelScreen() {
                 <MessageSquare className="w-6 h-6 text-white" />
               </div>
               <CardTitle>Encomendas Recebidas</CardTitle>
-              <CardDescription>
-                Pedidos personalizados que você pode responder
-              </CardDescription>
+              <CardDescription>Pedidos personalizados que você pode responder</CardDescription>
             </CardHeader>
             <CardContent>
               <Button className="w-full" variant="outline">
@@ -258,9 +232,7 @@ export function PainelScreen() {
               </div>
               <div>
                 <CardTitle>Dicas de Marketing & Vendas</CardTitle>
-                <CardDescription>
-                  Aprenda a divulgar suas peças e vender mais
-                </CardDescription>
+                <CardDescription>Aprenda a divulgar suas peças e vender mais</CardDescription>
               </div>
             </div>
           </CardHeader>

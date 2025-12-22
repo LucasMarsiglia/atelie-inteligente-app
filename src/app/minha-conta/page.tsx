@@ -5,7 +5,13 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock, LogOut, Trash2, AlertCircle } from 'lucide-react';
 import type { User as UserType } from '@/lib/types';
 
@@ -42,7 +48,7 @@ export default function MinhaContaPage() {
 
   const handleUpdateProfile = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) return;
 
     // Atualizar dados do usuário
@@ -54,10 +60,10 @@ export default function MinhaContaPage() {
 
     // Atualizar no localStorage
     localStorage.setItem('atelie_user', JSON.stringify(updatedUser));
-    
+
     // Atualizar na lista de usuários
     const allUsers = JSON.parse(localStorage.getItem('atelie_users') || '[]');
-    const updatedUsers = allUsers.map((u: UserType) => 
+    const updatedUsers = allUsers.map((u: UserType) =>
       u.id === user.id ? updatedUser : u
     );
     localStorage.setItem('atelie_users', JSON.stringify(updatedUsers));
@@ -101,11 +107,11 @@ export default function MinhaContaPage() {
     // Atualizar senha no usuário
     const updatedUser = {
       ...currentUser,
-      password: newPassword
+      password: newPassword,
     };
 
     // Atualizar na lista de usuários
-    const updatedUsers = allUsers.map((u: UserType) => 
+    const updatedUsers = allUsers.map((u: UserType) =>
       u.id === user.id ? updatedUser : u
     );
     localStorage.setItem('atelie_users', JSON.stringify(updatedUsers));
@@ -118,7 +124,7 @@ export default function MinhaContaPage() {
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
-    
+
     setMessage('Senha alterada com sucesso!');
     setErrorMessage('');
     setTimeout(() => setMessage(''), 3000);
@@ -279,11 +285,7 @@ export default function MinhaContaPage() {
                 />
               </div>
 
-              <Button
-                type="submit"
-                variant="outline"
-                className="w-full"
-              >
+              <Button type="submit" variant="outline" className="w-full">
                 Alterar Senha
               </Button>
             </form>
@@ -302,7 +304,8 @@ export default function MinhaContaPage() {
             {!showDeleteConfirm ? (
               <>
                 <p className="text-sm text-gray-700">
-                  Ao excluir sua conta, todos os seus dados serão removidos permanentemente.
+                  Ao excluir sua conta, todos os seus dados serão removidos
+                  permanentemente.
                 </p>
                 <Button
                   onClick={() => setShowDeleteConfirm(true)}
@@ -322,7 +325,8 @@ export default function MinhaContaPage() {
                       Tem certeza absoluta?
                     </h3>
                     <p className="text-sm text-gray-700 mb-3">
-                      Esta ação é <strong>irreversível</strong>. Todos os seus dados, pedidos e encomendas serão excluídos permanentemente.
+                      Esta ação é <strong>irreversível</strong>. Todos os seus dados,
+                      pedidos e encomendas serão excluídos permanentemente.
                     </p>
                   </div>
                 </div>
@@ -356,11 +360,7 @@ export default function MinhaContaPage() {
             <CardDescription>Encerrar sua sessão atual</CardDescription>
           </CardHeader>
           <CardContent>
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              className="w-full"
-            >
+            <Button onClick={handleLogout} variant="outline" className="w-full">
               Sair
             </Button>
           </CardContent>

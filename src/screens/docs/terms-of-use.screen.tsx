@@ -1,4 +1,4 @@
-import { Header } from '@/components/header/header';
+import { Header } from '@/components/common/header/header';
 
 export function TermsOfUseScreen() {
   return (
@@ -10,17 +10,16 @@ export function TermsOfUseScreen() {
         <h2 className="text-xl font-semibold mb-4">Ateliê Inteligente</h2>
         <p className="text-gray-600 mb-6">Última atualização: //__</p>
         <p className="mb-4">
-          Ao acessar e utilizar o Ateliê Inteligente, o usuário concorda com os termos
-          abaixo.
+          Ao acessar e utilizar o Ateliê Inteligente, o usuário concorda com os termos abaixo.
         </p>
 
         <ol className="list-decimal list-inside space-y-4">
           <li>
             <strong>Objeto</strong>
             <p>
-              O Ateliê Inteligente é uma plataforma digital que auxilia ceramistas na
-              criação, organização e divulgação de seus catálogos e peças, incluindo
-              recursos de geração de descrições com apoio de inteligência artificial.
+              O Ateliê Inteligente é uma plataforma digital que auxilia ceramistas na criação,
+              organização e divulgação de seus catálogos e peças, incluindo recursos de geração de
+              descrições com apoio de inteligência artificial.
             </p>
           </li>
 
@@ -37,10 +36,7 @@ export function TermsOfUseScreen() {
             <strong>Uso da plataforma</strong>
             <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
               <li>Utilizar a plataforma de forma lícita</li>
-              <li>
-                Não publicar conteúdos ilegais, ofensivos ou que violem direitos de
-                terceiros
-              </li>
+              <li>Não publicar conteúdos ilegais, ofensivos ou que violem direitos de terceiros</li>
               <li>Ser responsável pelos conteúdos que enviar ou gerar</li>
             </ul>
           </li>
@@ -58,12 +54,11 @@ export function TermsOfUseScreen() {
             <strong>Limitações de uso (MVP)</strong>
             <ul className="list-disc list-inside ml-6 mt-2 space-y-1">
               <li>
-                O aplicativo pode possuir limites de uso por plano (ex: quantidade de
-                descrições ou catálogos)
+                O aplicativo pode possuir limites de uso por plano (ex: quantidade de descrições ou
+                catálogos)
               </li>
               <li>
-                Funcionalidades podem ser alteradas, removidas ou aprimoradas durante a
-                fase de MVP
+                Funcionalidades podem ser alteradas, removidas ou aprimoradas durante a fase de MVP
               </li>
             </ul>
           </li>
@@ -71,32 +66,32 @@ export function TermsOfUseScreen() {
           <li>
             <strong>Propriedade intelectual</strong>
             <p>
-              O aplicativo e sua tecnologia pertencem ao Ateliê Inteligente. Os conteúdos
-              enviados pelos usuários continuam sendo de sua propriedade.
+              O aplicativo e sua tecnologia pertencem ao Ateliê Inteligente. Os conteúdos enviados
+              pelos usuários continuam sendo de sua propriedade.
             </p>
           </li>
 
           <li>
             <strong>Suspensão ou encerramento</strong>
             <p>
-              O Ateliê Inteligente pode suspender ou encerrar contas que violem estes
-              Termos ou a legislação vigente.
+              O Ateliê Inteligente pode suspender ou encerrar contas que violem estes Termos ou a
+              legislação vigente.
             </p>
           </li>
 
           <li>
             <strong>Exclusão de conta</strong>
             <p>
-              O usuário pode solicitar a exclusão da conta a qualquer momento, conforme
-              descrito na Política de Privacidade.
+              O usuário pode solicitar a exclusão da conta a qualquer momento, conforme descrito na
+              Política de Privacidade.
             </p>
           </li>
 
           <li>
             <strong>Alterações nos termos</strong>
             <p>
-              Estes Termos podem ser atualizados a qualquer momento. A versão vigente
-              estará sempre disponível no aplicativo.
+              Estes Termos podem ser atualizados a qualquer momento. A versão vigente estará sempre
+              disponível no aplicativo.
             </p>
           </li>
 
@@ -105,10 +100,7 @@ export function TermsOfUseScreen() {
             <p>
               Dúvidas ou solicitações podem ser enviadas para: <br />
               📧{' '}
-              <a
-                href="mailto:suporte@atelieinteligente.com"
-                className="text-blue-600 underline"
-              >
+              <a href="mailto:suporte@atelieinteligente.com" className="text-blue-600 underline">
                 suporte@atelieinteligente.com
               </a>
             </p>

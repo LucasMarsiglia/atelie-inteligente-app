@@ -1,6 +1,6 @@
 import { Palette, ShoppingBag, Sparkles } from 'lucide-react';
-import { Header } from '../header/header';
-import { Footer } from '../footer/footer';
+import { Header } from '@/components/common/header/header';
+import { Footer } from '@/components/common/footer/footer';
 import { IAuthLayoutProps } from './auth-layout.types';
 
 export function AuthLayout({ children }: IAuthLayoutProps) {
@@ -22,8 +22,8 @@ export function AuthLayout({ children }: IAuthLayoutProps) {
               </span>
             </h1>
             <p className="text-xl text-gray-600">
-              Crie catálogos profissionais, gere textos para redes sociais e gerencie
-              pedidos em um só lugar.
+              Crie catálogos profissionais, gere textos para redes sociais e gerencie pedidos em um
+              só lugar.
             </p>
           </div>
 
