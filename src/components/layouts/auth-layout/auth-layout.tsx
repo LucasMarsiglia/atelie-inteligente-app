@@ -1,11 +1,14 @@
 import { Palette, ShoppingBag, Sparkles } from 'lucide-react';
-import { Header } from '../header/header';
-import { Footer } from '../footer/footer';
+import { Header } from '@/components/common/header/header';
+import { Footer } from '@/components/common/footer/footer';
 import { IAuthLayoutProps } from './auth-layout.types';
+import NextTopLoader from 'nextjs-toploader';
 
 export function AuthLayout({ children }: IAuthLayoutProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50 text-left">
+      <NextTopLoader color="#c2410c" />
+
       <Header />
 
       <main className="container mx-auto px-4 py-12">
@@ -22,8 +25,8 @@ export function AuthLayout({ children }: IAuthLayoutProps) {
               </span>
             </h1>
             <p className="text-xl text-gray-600">
-              Crie catálogos profissionais, gere textos para redes sociais e gerencie
-              pedidos em um só lugar.
+              Crie catálogos profissionais, gere textos para redes sociais e gerencie pedidos em um
+              só lugar.
             </p>
           </div>
 
@@ -46,7 +49,7 @@ export function AuthLayout({ children }: IAuthLayoutProps) {
             </div>
             <h3 className="text-xl font-semibold">Vendas Simplificadas</h3>
             <p className="text-gray-600">
-              Checkout integrado e gestão completa de pedidos
+              Recebimento de encomenda e gestão de pedidos em um só lugar
             </p>
           </div>
           <div className="text-center space-y-3">

@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { Menu, User, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -18,11 +16,11 @@ interface NavbarProps {
   showMenuButton?: boolean;
 }
 
-export function Navbar({ 
-  isAuthenticated = false, 
+export function Navbar({
+  isAuthenticated = false,
   userName,
   onMenuClick,
-  showMenuButton = false 
+  showMenuButton = false,
 }: NavbarProps) {
   return (
     <nav className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
@@ -71,7 +69,10 @@ export function Navbar({
               <Button variant="ghost" asChild>
                 <Link href="/login">Entrar</Link>
               </Button>
-              <Button asChild className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+              <Button
+                asChild
+                className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+              >
                 <Link href="/cadastro">Cadastrar</Link>
               </Button>
             </div>
