@@ -2,16 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Package, 
-  ShoppingBag, 
-  User, 
-  Lightbulb,
-  Home,
-  Search,
-  X
-} from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Package, ShoppingBag, User, Lightbulb, Home, Search, X } from 'lucide-react';
+import { cn } from '@/core/utils/utils';
 import { Button } from '@/components/ui/button';
 import { UserType } from '@/lib/types';
 
@@ -44,18 +36,15 @@ export function Sidebar({ userType, isOpen = true, onClose }: SidebarProps) {
     <>
       {/* Overlay para mobile */}
       {isOpen && (
-        <div 
-          className="fixed inset-0 bg-black/20 z-40 lg:hidden"
-          onClick={onClose}
-        />
+        <div className="fixed inset-0 bg-black/20 z-40 lg:hidden" onClick={onClose} />
       )}
 
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:sticky top-0 left-0 h-screen bg-white border-r z-50 transition-transform duration-300",
-          "w-64 flex flex-col",
-          isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          'fixed lg:sticky top-0 left-0 h-screen bg-white border-r z-50 transition-transform duration-300',
+          'w-64 flex flex-col',
+          isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
         )}
       >
         {/* Header */}
@@ -71,17 +60,17 @@ export function Sidebar({ userType, isOpen = true, onClose }: SidebarProps) {
           {links.map((link) => {
             const Icon = link.icon;
             const isActive = pathname === link.href;
-            
+
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 onClick={onClose}
                 className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
+                  'flex items-center gap-3 px-4 py-3 rounded-lg transition-colors',
                   isActive
-                    ? "bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700 font-medium"
-                    : "text-gray-600 hover:bg-gray-50"
+                    ? 'bg-gradient-to-r from-amber-50 to-orange-50 text-orange-700 font-medium'
+                    : 'text-gray-600 hover:bg-gray-50'
                 )}
               >
                 <Icon className="h-5 w-5" />

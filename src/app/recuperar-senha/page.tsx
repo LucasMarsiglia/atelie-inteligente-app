@@ -5,7 +5,13 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Navbar } from '@/components/custom/navbar';
 import { ArrowLeft } from 'lucide-react';
 
@@ -23,7 +29,7 @@ export default function RecuperarSenhaPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-amber-50/30 to-white">
       <Navbar />
-      
+
       <div className="container mx-auto px-4 py-12 flex items-center justify-center min-h-[calc(100vh-4rem)]">
         <Card className="w-full max-w-md">
           <CardHeader className="space-y-1">
@@ -31,10 +37,9 @@ export default function RecuperarSenhaPage() {
               Recuperar senha
             </CardTitle>
             <CardDescription className="text-center">
-              {submitted 
+              {submitted
                 ? 'Verifique seu e-mail para redefinir a senha'
-                : 'Digite seu e-mail para receber instruções'
-              }
+                : 'Digite seu e-mail para receber instruções'}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -42,7 +47,8 @@ export default function RecuperarSenhaPage() {
               <div className="space-y-4">
                 <div className="p-4 bg-green-50 border border-green-200 rounded-lg text-center">
                   <p className="text-sm text-green-800">
-                    Um e-mail foi enviado para <strong>{email}</strong> com instruções para redefinir sua senha.
+                    Um e-mail foi enviado para <strong>{email}</strong> com instruções
+                    para redefinir sua senha.
                   </p>
                 </div>
                 <Button asChild variant="outline" className="w-full">
@@ -66,8 +72,8 @@ export default function RecuperarSenhaPage() {
                   />
                 </div>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
                 >
                   Enviar instruções

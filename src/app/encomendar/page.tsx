@@ -6,8 +6,22 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ArrowLeft, Package, Upload, X, Info, Link as LinkIcon, Image as ImageIcon } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  ArrowLeft,
+  Package,
+  Upload,
+  X,
+  Info,
+  Link as LinkIcon,
+  Image as ImageIcon,
+} from 'lucide-react';
 import type { User } from '@/lib/types';
 
 interface CustomOrder {
@@ -41,7 +55,7 @@ export default function EncomendarPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [photoMethod, setPhotoMethod] = useState<'url' | 'upload' | 'paste'>('upload');
-  const [uploadedImage, setUploadedImage] = useState<string>('');
+  const [, setUploadedImage] = useState<string>('');
 
   useEffect(() => {
     const userData = localStorage.getItem('atelie_user');
@@ -97,7 +111,7 @@ export default function EncomendarPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setReferenceImage(value);
-    
+
     // Validar se é uma URL válida
     if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
       setImagePreview(value);
@@ -108,7 +122,7 @@ export default function EncomendarPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) return;
 
     setIsSubmitting(true);
@@ -128,12 +142,16 @@ export default function EncomendarPage() {
     };
 
     // Salvar encomenda
-    const existingOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
+    const existingOrders = JSON.parse(
+      localStorage.getItem('atelie_custom_orders') || '[]'
+    );
     existingOrders.push(newOrder);
     localStorage.setItem('atelie_custom_orders', JSON.stringify(existingOrders));
 
-    setSuccessMessage('Encomenda enviada com sucesso! Os ceramistas receberão sua solicitação.');
-    
+    setSuccessMessage(
+      'Encomenda enviada com sucesso! Os ceramistas receberão sua solicitação.'
+    );
+
     // Limpar formulário
     setPieceName('');
     setQuantity(1);
@@ -182,8 +200,9 @@ export default function EncomendarPage() {
             <div className="flex gap-3">
               <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <p className="text-gray-700 leading-relaxed">
-                Aqui você pode solicitar uma peça personalizada ou uma encomenda.
-                Os ceramistas cadastrados recebem seu pedido e podem entrar em contato diretamente para combinar detalhes, valores e prazos.
+                Aqui você pode solicitar uma peça personalizada ou uma encomenda. Os
+                ceramistas cadastrados recebem seu pedido e podem entrar em contato
+                diretamente para combinar detalhes, valores e prazos.
               </p>
             </div>
           </CardContent>
@@ -246,7 +265,7 @@ export default function EncomendarPage() {
 
               <div className="space-y-4">
                 <Label>Imagem de Referência (opcional)</Label>
-                
+
                 <div className="flex gap-2">
                   <Button
                     type="button"
@@ -279,11 +298,7 @@ export default function EncomendarPage() {
 
                 {photoMethod === 'upload' && (
                   <div className="space-y-2">
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                    />
+                    <Input type="file" accept="image/*" onChange={handleFileUpload} />
                     <p className="text-xs text-gray-500">
                       Selecione uma imagem da galeria do seu dispositivo
                     </p>
