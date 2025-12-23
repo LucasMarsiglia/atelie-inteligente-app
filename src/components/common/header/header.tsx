@@ -1,6 +1,7 @@
 import { Palette } from 'lucide-react';
+import { IHeaderProps } from './header.types';
 
-export function Header() {
+export function Header({ children }: IHeaderProps) {
   return (
     <header className="border-b bg-white/80 backdrop-blur-sm">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -10,6 +11,7 @@ export function Header() {
             Ateliê Inteligente
           </span>
         </div>
+        {children}
       </div>
     </header>
   );

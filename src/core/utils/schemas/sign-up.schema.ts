@@ -23,6 +23,13 @@ export const SignUpSchema = z.object({
     .min(6, 'A senha deve ter no mínimo 6 caracteres'),
 
   accountType: z.enum(['ceramista', 'comprador'], { message: 'Tipo de conta inválido' }),
+
+  termsOfUse: z
+    .boolean()
+    .optional()
+    .refine((val) => val === true, {
+      message: 'Você deve aceitar os termos de uso',
+    }),
 });
 
 export type SignUpSchemaType = z.infer<typeof SignUpSchema>;

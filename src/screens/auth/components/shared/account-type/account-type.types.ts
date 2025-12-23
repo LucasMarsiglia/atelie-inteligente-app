@@ -3,4 +3,5 @@ export interface IAccountTypeProps {
   selectType?: 'ceramista' | 'comprador';
   name: 'ceramista' | 'comprador';
   disabled?: boolean;
+  icon?: React.ReactNode;
 }

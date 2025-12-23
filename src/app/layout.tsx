@@ -5,6 +5,7 @@ import '@/core/styles/globals.css';
 // Import all available fonts for AI usage
 import '@/core/utils/fonts';
 import { ToastContainer } from 'react-toastify';
+import NextTopLoader from 'nextjs-toploader';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,8 +19,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: 'Ateliê Inteligente - Plataforma para Ceramistas',
-  description:
-    'Crie, compartilhe e venda suas peças de cerâmica com inteligência artificial',
+  description: 'Crie, compartilhe e venda suas peças de cerâmica com inteligência artificial',
 };
 
 export default function RootLayout({
@@ -32,6 +32,9 @@ export default function RootLayout({
       <head>{/* <Script src="/lasy-bridge.js" strategy="beforeInteractive" /> */}</head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
+
+        <NextTopLoader color="#c2410c" />
+
         <ToastContainer
           position="top-right"
           autoClose={5000}

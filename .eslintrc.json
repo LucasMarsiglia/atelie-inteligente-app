@@ -11,21 +11,13 @@
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
-    "ecmaFeatures": {
-      "jsx": true
-    },
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "plugins": ["react", "prettier"],
   "rules": {
-    "prettier/prettier": ["error", { "printWidth": 90 }],
-    "max-len": ["error", { "code": 90 }],
+    "prettier/prettier": ["error"],
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
-    "semi": ["error", "always"],
-    "quotes": ["error", "double"],
-    "indent": ["error", 2],
     "no-unused-vars": "warn",
     "no-console": "warn"
   },
