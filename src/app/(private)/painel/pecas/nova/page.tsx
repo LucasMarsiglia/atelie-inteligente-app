@@ -5,13 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Select,
   SelectContent,
@@ -39,8 +33,7 @@ export default function NovaPecaPage() {
   const [loading, setLoading] = useState(false);
   const [photoMethod, setPhotoMethod] = useState<'url' | 'upload' | 'paste'>('url');
   const [uploadedImage, setUploadedImage] = useState<string>('');
-  const [descriptionStyle, setDescriptionStyle] =
-    useState<DescriptionStyle>('envolvente');
+  const [descriptionStyle, setDescriptionStyle] = useState<DescriptionStyle>('envolvente');
   const [generatedDescriptions, setGeneratedDescriptions] = useState<string[]>([]);
   const [selectedDescription, setSelectedDescription] = useState<number>(0);
 
@@ -58,21 +51,21 @@ export default function NovaPecaPage() {
     price: '',
   });
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'ceramista' || parsedUser.subscriptionStatus !== 'active') {
-      router.push('/');
-      return;
-    }
+  //   const parsedUser = JSON.parse(userData);
+  //   if (parsedUser.type !== 'ceramista' || parsedUser.subscriptionStatus !== 'active') {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    setUser(parsedUser);
-  }, [router]);
+  //   setUser(parsedUser);
+  // }, [router]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -214,10 +207,7 @@ export default function NovaPecaPage() {
         finish: formData.finish,
         photo: formData.photo || undefined,
         availability: formData.availability,
-        quantity:
-          formData.availability === 'em_estoque'
-            ? parseInt(formData.quantity)
-            : undefined,
+        quantity: formData.availability === 'em_estoque' ? parseInt(formData.quantity) : undefined,
         deliveryDays: parseInt(formData.deliveryDays),
         price: parseFloat(formData.price),
 
@@ -245,8 +235,6 @@ export default function NovaPecaPage() {
       setLoading(false);
     }
   };
-
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
@@ -298,9 +286,7 @@ export default function NovaPecaPage() {
                       step="0.1"
                       placeholder="Altura"
                       value={formData.height}
-                      onChange={(e) =>
-                        setFormData({ ...formData, height: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, height: e.target.value })}
                       required
                     />
                     <span className="text-xs text-gray-500">Altura</span>
@@ -311,9 +297,7 @@ export default function NovaPecaPage() {
                       step="0.1"
                       placeholder="Largura"
                       value={formData.width}
-                      onChange={(e) =>
-                        setFormData({ ...formData, width: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, width: e.target.value })}
                       required
                     />
                     <span className="text-xs text-gray-500">Largura</span>
@@ -324,9 +308,7 @@ export default function NovaPecaPage() {
                       step="0.1"
                       placeholder="Profundidade"
                       value={formData.depth}
-                      onChange={(e) =>
-                        setFormData({ ...formData, depth: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, depth: e.target.value })}
                       required
                     />
                     <span className="text-xs text-gray-500">Profundidade</span>
@@ -342,9 +324,7 @@ export default function NovaPecaPage() {
                     id="material"
                     placeholder="Ex: Argila, Porcelana, Terracota"
                     value={formData.material}
-                    onChange={(e) =>
-                      setFormData({ ...formData, material: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, material: e.target.value })}
                     required
                   />
                 </div>
@@ -469,9 +449,7 @@ export default function NovaPecaPage() {
                       type="url"
                       placeholder="https://exemplo.com/foto.jpg"
                       value={formData.photo}
-                      onChange={(e) =>
-                        setFormData({ ...formData, photo: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, photo: e.target.value })}
                     />
                     <p className="text-xs text-gray-500">
                       Cole o link de uma imagem hospedada online
@@ -499,9 +477,7 @@ export default function NovaPecaPage() {
                       <p className="text-sm text-gray-600 mb-2">
                         Clique aqui e cole a imagem (Ctrl+V ou Cmd+V)
                       </p>
-                      <p className="text-xs text-gray-500">
-                        Copie uma imagem e cole nesta área
-                      </p>
+                      <p className="text-xs text-gray-500">Copie uma imagem e cole nesta área</p>
                     </div>
                   </div>
                 )}
@@ -547,9 +523,7 @@ export default function NovaPecaPage() {
                       min="1"
                       placeholder="Ex: 5"
                       value={formData.quantity}
-                      onChange={(e) =>
-                        setFormData({ ...formData, quantity: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
                       required
                     />
                   </div>
@@ -561,9 +535,7 @@ export default function NovaPecaPage() {
                       min="1"
                       placeholder="Ex: 7"
                       value={formData.deliveryDays}
-                      onChange={(e) =>
-                        setFormData({ ...formData, deliveryDays: e.target.value })
-                      }
+                      onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
                       required
                     />
                     <p className="text-xs text-gray-500">
@@ -580,9 +552,7 @@ export default function NovaPecaPage() {
                     min="1"
                     placeholder="Ex: 15"
                     value={formData.deliveryDays}
-                    onChange={(e) =>
-                      setFormData({ ...formData, deliveryDays: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, deliveryDays: e.target.value })}
                     required
                   />
                   <p className="text-xs text-gray-500">

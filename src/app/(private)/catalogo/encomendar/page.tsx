@@ -6,13 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   ArrowLeft,
   Package,
@@ -46,130 +40,126 @@ interface CustomOrder {
 
 export default function EncomendarPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
-  const [pieceName, setPieceName] = useState('');
-  const [quantity, setQuantity] = useState(1);
-  const [description, setDescription] = useState('');
-  const [referenceImage, setReferenceImage] = useState('');
-  const [imagePreview, setImagePreview] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  // const [user, setUser] = useState<User | null>(null);
+  // const [pieceName, setPieceName] = useState('');
+  // const [quantity, setQuantity] = useState(1);
+  // const [description, setDescription] = useState('');
+  // const [referenceImage, setReferenceImage] = useState('');
+  // const [imagePreview, setImagePreview] = useState('');
+  // const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
   const [photoMethod, setPhotoMethod] = useState<'url' | 'upload' | 'paste'>('upload');
-  const [, setUploadedImage] = useState<string>('');
+  // const [, setUploadedImage] = useState<string>('');
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // // useEffect(() => {
+  // //   const userData = localStorage.getItem('atelie_user');
+  // //   if (!userData) {
+  // //     router.push('/');
+  // //     return;
+  // //   }
 
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'comprador') {
-      router.push('/painel');
-      return;
-    }
+  // //   const parsedUser = JSON.parse(userData);
+  // //   if (parsedUser.type !== 'comprador') {
+  // //     router.push('/painel');
+  // //     return;
+  // //   }
 
-    setUser(parsedUser);
-  }, [router]);
+  // //   setUser(parsedUser);
+  // // }, [router]);
 
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = reader.result as string;
-        setUploadedImage(base64);
-        setReferenceImage(base64);
-        setImagePreview(base64);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  // const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const file = e.target.files?.[0];
+  //   if (file) {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => {
+  //       const base64 = reader.result as string;
+  //       setUploadedImage(base64);
+  //       setReferenceImage(base64);
+  //       setImagePreview(base64);
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // };
 
-  const handlePaste = async (e: React.ClipboardEvent) => {
-    const items = e.clipboardData?.items;
-    if (!items) return;
+  // const handlePaste = async (e: React.ClipboardEvent) => {
+  //   const items = e.clipboardData?.items;
+  //   if (!items) return;
 
-    for (let i = 0; i < items.length; i++) {
-      if (items[i].type.indexOf('image') !== -1) {
-        const blob = items[i].getAsFile();
-        if (blob) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result as string;
-            setUploadedImage(base64);
-            setReferenceImage(base64);
-            setImagePreview(base64);
-          };
-          reader.readAsDataURL(blob);
-        }
-      }
-    }
-  };
+  //   for (let i = 0; i < items.length; i++) {
+  //     if (items[i].type.indexOf('image') !== -1) {
+  //       const blob = items[i].getAsFile();
+  //       if (blob) {
+  //         const reader = new FileReader();
+  //         reader.onloadend = () => {
+  //           const base64 = reader.result as string;
+  //           setUploadedImage(base64);
+  //           setReferenceImage(base64);
+  //           setImagePreview(base64);
+  //         };
+  //         reader.readAsDataURL(blob);
+  //       }
+  //     }
+  //   }
+  // };
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setReferenceImage(value);
+  // const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setReferenceImage(value);
 
-    // Validar se é uma URL válida
-    if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
-      setImagePreview(value);
-    } else {
-      setImagePreview('');
-    }
-  };
+  //   // Validar se é uma URL válida
+  //   if (value && (value.startsWith('http://') || value.startsWith('https://'))) {
+  //     setImagePreview(value);
+  //   } else {
+  //     setImagePreview('');
+  //   }
+  // };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // const handleSubmit = (e: React.FormEvent) => {
+  //   e.preventDefault();
 
-    if (!user) return;
+  //   if (!user) return;
 
-    setIsSubmitting(true);
+  //   setIsSubmitting(true);
 
-    const newOrder: CustomOrder = {
-      id: `order_${Date.now()}`,
-      buyerId: user.id,
-      buyerName: user.name,
-      buyerEmail: user.email,
-      pieceName,
-      quantity,
-      description,
-      referenceImage: referenceImage || undefined,
-      status: 'pending',
-      createdAt: new Date().toISOString(),
-      messages: [],
-    };
+  //   const newOrder: CustomOrder = {
+  //     id: `order_${Date.now()}`,
+  //     buyerId: user.id,
+  //     buyerName: user.name,
+  //     buyerEmail: user.email,
+  //     pieceName,
+  //     quantity,
+  //     description,
+  //     referenceImage: referenceImage || undefined,
+  //     status: 'pending',
+  //     createdAt: new Date().toISOString(),
+  //     messages: [],
+  //   };
 
-    // Salvar encomenda
-    const existingOrders = JSON.parse(
-      localStorage.getItem('atelie_custom_orders') || '[]'
-    );
-    existingOrders.push(newOrder);
-    localStorage.setItem('atelie_custom_orders', JSON.stringify(existingOrders));
+  //   // Salvar encomenda
+  //   const existingOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
+  //   existingOrders.push(newOrder);
+  //   localStorage.setItem('atelie_custom_orders', JSON.stringify(existingOrders));
 
-    setSuccessMessage(
-      'Encomenda enviada com sucesso! Os ceramistas receberão sua solicitação.'
-    );
+  //   setSuccessMessage('Encomenda enviada com sucesso! Os ceramistas receberão sua solicitação.');
 
-    // Limpar formulário
-    setPieceName('');
-    setQuantity(1);
-    setDescription('');
-    setReferenceImage('');
-    setImagePreview('');
-    setUploadedImage('');
-    setIsSubmitting(false);
+  //   // Limpar formulário
+  //   setPieceName('');
+  //   setQuantity(1);
+  //   setDescription('');
+  //   setReferenceImage('');
+  //   setImagePreview('');
+  //   setUploadedImage('');
+  //   setIsSubmitting(false);
 
-    // Redirecionar após 2 segundos
-    setTimeout(() => {
-      router.push('/minhas-encomendas');
-    }, 2000);
-  };
+  //   // Redirecionar após 2 segundos
+  //   setTimeout(() => {
+  //     router.push('/minhas-encomendas');
+  //   }, 2000);
+  // };
 
-  if (!user) {
-    return null;
-  }
+  // if (!user) {
+  //   return null;
+  // }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -200,9 +190,9 @@ export default function EncomendarPage() {
             <div className="flex gap-3">
               <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <p className="text-gray-700 leading-relaxed">
-                Aqui você pode solicitar uma peça personalizada ou uma encomenda. Os
-                ceramistas cadastrados recebem seu pedido e podem entrar em contato
-                diretamente para combinar detalhes, valores e prazos.
+                Aqui você pode solicitar uma peça personalizada ou uma encomenda. Os ceramistas
+                cadastrados recebem seu pedido e podem entrar em contato diretamente para combinar
+                detalhes, valores e prazos.
               </p>
             </div>
           </CardContent>
@@ -222,15 +212,15 @@ export default function EncomendarPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="pieceName">Nome da Peça Desejada *</Label>
                 <Input
                   id="pieceName"
                   type="text"
                   placeholder="Ex: Vaso decorativo grande"
-                  value={pieceName}
-                  onChange={(e) => setPieceName(e.target.value)}
+                  // value={pieceName}
+                  // onChange={(e) => setPieceName(e.target.value)}
                   required
                 />
               </div>
@@ -241,8 +231,8 @@ export default function EncomendarPage() {
                   id="quantity"
                   type="number"
                   min="1"
-                  value={quantity}
-                  onChange={(e) => setQuantity(parseInt(e.target.value))}
+                  // value={quantity}
+                  // onChange={(e) => setQuantity(parseInt(e.target.value))}
                   required
                 />
               </div>
@@ -252,8 +242,8 @@ export default function EncomendarPage() {
                 <Textarea
                   id="description"
                   placeholder="Descreva em detalhes como você imagina a peça: tamanho, cores, estilo, uso pretendido, etc."
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
+                  // value={description}
+                  // onChange={(e) => setDescription(e.target.value)}
                   rows={6}
                   required
                   className="resize-none"
@@ -269,27 +259,27 @@ export default function EncomendarPage() {
                 <div className="flex gap-2">
                   <Button
                     type="button"
-                    variant={photoMethod === 'upload' ? 'default' : 'outline'}
+                    // variant={photoMethod === 'upload' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setPhotoMethod('upload')}
+                    // onClick={() => setPhotoMethod('upload')}
                   >
                     <Upload className="w-4 h-4 mr-2" />
                     Upload
                   </Button>
                   <Button
                     type="button"
-                    variant={photoMethod === 'paste' ? 'default' : 'outline'}
+                    // variant={photoMethod === 'paste' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setPhotoMethod('paste')}
+                    // onClick={() => setPhotoMethod('paste')}
                   >
                     <ImageIcon className="w-4 h-4 mr-2" />
                     Colar
                   </Button>
                   <Button
                     type="button"
-                    variant={photoMethod === 'url' ? 'default' : 'outline'}
+                    // variant={photoMethod === 'url' ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => setPhotoMethod('url')}
+                    // onClick={() => setPhotoMethod('url')}
                   >
                     <LinkIcon className="w-4 h-4 mr-2" />
                     URL
@@ -298,7 +288,7 @@ export default function EncomendarPage() {
 
                 {photoMethod === 'upload' && (
                   <div className="space-y-2">
-                    <Input type="file" accept="image/*" onChange={handleFileUpload} />
+                    {/* <Input type="file" accept="image/*" onChange={handleFileUpload} /> */}
                     <p className="text-xs text-gray-500">
                       Selecione uma imagem da galeria do seu dispositivo
                     </p>
@@ -309,16 +299,14 @@ export default function EncomendarPage() {
                   <div className="space-y-2">
                     <div
                       className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-pink-400 transition-colors"
-                      onPaste={handlePaste}
+                      // onPaste={handlePaste}
                       tabIndex={0}
                     >
                       <ImageIcon className="w-12 h-12 mx-auto mb-4 text-gray-400" />
                       <p className="text-sm text-gray-600 mb-2">
                         Clique aqui e cole a imagem (Ctrl+V ou Cmd+V)
                       </p>
-                      <p className="text-xs text-gray-500">
-                        Copie uma imagem e cole nesta área
-                      </p>
+                      <p className="text-xs text-gray-500">Copie uma imagem e cole nesta área</p>
                     </div>
                   </div>
                 )}
@@ -329,15 +317,15 @@ export default function EncomendarPage() {
                       id="referenceImage"
                       type="url"
                       placeholder="Cole a URL de uma imagem de referência"
-                      value={referenceImage}
-                      onChange={handleImageChange}
+                      // value={referenceImage}
+                      // onChange={handleImageChange}
                     />
                     <p className="text-xs text-gray-500">
                       Cole a URL de uma imagem que sirva de inspiração para sua peça
                     </p>
                   </div>
                 )}
-
+                {/* 
                 {imagePreview && (
                   <div className="relative">
                     <img
@@ -360,16 +348,17 @@ export default function EncomendarPage() {
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
-                )}
+                )} */}
               </div>
 
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                // disabled={isSubmitting}
                 size="lg"
                 className="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
               >
-                {isSubmitting ? 'Enviando...' : 'Enviar Encomenda'}
+                {/* {isSubmitting ? 'Enviando...' : 'Enviar Encomenda'} */}
+                Enviar Encomenda
               </Button>
             </form>
           </CardContent>
