@@ -2,9 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from './core/utils/lib/server';
 import { cookies } from 'next/headers';
 
-const authRoutes = ['/auth/sign-in', '/auth/sign-up', '/auth/confirm-registration'];
-const publicRoutes = ['/docs/terms-of-use', '/docs/privacy-policy'];
-const privateRedirect = '/painel';
+const publicRoutes = [
+  '/docs/terms-of-use',
+  '/docs/privacy-policy',
+  '/auth/sign-in',
+  '/auth/sign-up',
+  '/auth/confirm-registration',
+];
+
+const roleRoutes: Record<'ceramista' | 'comprador', string[]> = {
+  ceramista: ['/painel'],
+  comprador: ['/catalogo'],
+};
 
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl.pathname;
@@ -15,14 +24,12 @@ export async function middleware(req: NextRequest) {
   const errorDescription = searchParams.get('error_description');
 
   if (error || errorCode) {
-    const cleanUrl = new URL(req.nextUrl.pathname, req.url);
-
     const redirectUrl = new URL('/auth/sign-in', req.url);
     if (error) redirectUrl.searchParams.set('error', error);
     if (errorCode) redirectUrl.searchParams.set('error_code', errorCode);
-    if (errorDescription)
+    if (errorDescription) {
       redirectUrl.searchParams.set('error_description', errorDescription);
-
+    }
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -31,31 +38,43 @@ export async function middleware(req: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const isAuthRoute = authRoutes.includes(path);
-  const isPublicRoute = publicRoutes.includes(path);
+  const isPublicRoute = publicRoutes.some((route) => path.startsWith(route));
 
   if (isPublicRoute) {
     return NextResponse.next();
   }
 
-  if (user && isAuthRoute) {
-    return NextResponse.redirect(new URL(privateRedirect, req.url));
-  }
-
-  if (!user && !isAuthRoute) {
+  if (!user && !isPublicRoute) {
     const cookieStore = await cookies();
-    const allCookies = cookieStore.getAll();
 
-    for (const cookie of allCookies) {
+    for (const cookie of cookieStore.getAll()) {
       if (cookie.name.startsWith('sb-')) {
         cookieStore.delete(cookie.name);
       }
     }
 
-    const response = NextResponse.redirect(new URL('/auth/sign-in', req.url));
-    response.headers.delete('Set-Cookie');
+    return NextResponse.redirect(new URL('/auth/sign-in', req.url));
+  }
 
-    return response;
+  if (user) {
+    const userType = user.user_metadata?.type as 'ceramista' | 'comprador' | undefined;
+
+    if (!userType) {
+      return NextResponse.redirect(new URL('/auth/sign-in', req.url));
+    }
+
+    const allowedRoutes = roleRoutes[userType];
+
+    const isAllowedByRole = allowedRoutes.some((route) => path.startsWith(route));
+
+    if (
+      !isAllowedByRole &&
+      Object.values(roleRoutes)
+        .flat()
+        .some((route) => path.startsWith(route))
+    ) {
+      return NextResponse.redirect(new URL(allowedRoutes[0], req.url));
+    }
   }
 
   return NextResponse.next();
