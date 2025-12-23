@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, MessageSquare, Package, Trash2, AlertCircle } from 'lucide-react';
 import type { User } from '@/lib/types';
+import router from 'next/router';
 
 interface CustomOrder {
   id: string;
@@ -30,30 +31,30 @@ interface CustomOrder {
 
 export default function MinhasEncomendasPage() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<CustomOrder[]>([]);
   const [orderToDelete, setOrderToDelete] = useState<CustomOrder | null>(null);
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'comprador') {
-      router.push('/painel');
-      return;
-    }
+  //   const parsedUser = JSON.parse(userData);
+  //   if (parsedUser.type !== 'comprador') {
+  //     router.push('/painel');
+  //     return;
+  //   }
 
-    setUser(parsedUser);
+  //   setUser(parsedUser);
 
-    // Carregar encomendas do comprador
-    const allOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
-    const userOrders = allOrders.filter((order: CustomOrder) => order.buyerId === parsedUser.id);
-    setOrders(userOrders);
-  }, [router]);
+  //   // Carregar encomendas do comprador
+  //   const allOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
+  //   const userOrders = allOrders.filter((order: CustomOrder) => order.buyerId === parsedUser.id);
+  //   setOrders(userOrders);
+  // }, [router]);
 
   const getStatusBadge = (status: string) => {
     const badges = {
@@ -84,7 +85,11 @@ export default function MinhasEncomendasPage() {
       localStorage.setItem('atelie_custom_orders', JSON.stringify(updatedOrders));
 
       // 2. Notificar ceramista apenas se houver mensagens (chat iniciado)
-      if (orderToDelete.messages && orderToDelete.messages.length > 0 && orderToDelete.ceramistaId) {
+      if (
+        orderToDelete.messages &&
+        orderToDelete.messages.length > 0 &&
+        orderToDelete.ceramistaId
+      ) {
         // Criar notificação para o ceramista
         const notifications = JSON.parse(localStorage.getItem('atelie_notifications') || '[]');
         notifications.push({
@@ -101,20 +106,15 @@ export default function MinhasEncomendasPage() {
       }
 
       // 3. Atualizar lista local
-      setOrders(updatedOrders.filter((o: CustomOrder) => o.buyerId === user?.id));
+      setOrders(updatedOrders.filter((o: CustomOrder) => o.buyerId === '1'));
 
       // 4. Fechar modal de confirmação
       setOrderToDelete(null);
-
     } catch (error) {
       console.error('Erro ao excluir encomenda:', error);
       alert('❌ Erro ao excluir encomenda. Por favor, tente novamente.');
     }
   };
-
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -146,7 +146,7 @@ export default function MinhasEncomendasPage() {
                 Você ainda não fez nenhuma solicitação de encomenda personalizada.
               </p>
               <Button
-                onClick={() => router.push('/encomendar')}
+                onClick={() => router.push('encomendar')}
                 className="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
               >
                 Fazer Primeira Encomenda
@@ -157,9 +157,7 @@ export default function MinhasEncomendasPage() {
           <div className="space-y-4">
             {orders.map((order) => {
               const statusBadge = getStatusBadge(order.status);
-              const unreadMessages = order.messages.filter(
-                (msg) => msg.senderId !== user.id
-              ).length;
+              const unreadMessages = order.messages.filter((msg) => msg.senderId !== '1').length;
 
               return (
                 <Card key={order.id} className="hover:shadow-lg transition-shadow">
@@ -171,7 +169,9 @@ export default function MinhasEncomendasPage() {
                           Quantidade: {order.quantity} | Enviado em {formatDate(order.createdAt)}
                         </CardDescription>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusBadge.class}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${statusBadge.class}`}
+                      >
                         {statusBadge.label}
                       </span>
                     </div>
@@ -233,7 +233,7 @@ export default function MinhasEncomendasPage() {
                       ) : (
                         <div className="flex flex-col sm:flex-row gap-2">
                           <Button
-                            onClick={() => router.push(`/chat/${order.id}`)}
+                            // onClick={() => router.push(`/chat/${order.id}`)}
                             className="flex-1 bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700"
                           >
                             <MessageSquare className="w-4 h-4 mr-2" />
@@ -244,7 +244,7 @@ export default function MinhasEncomendasPage() {
                               </span>
                             )}
                           </Button>
-                          
+
                           <Button
                             onClick={() => setOrderToDelete(order)}
                             variant="outline"

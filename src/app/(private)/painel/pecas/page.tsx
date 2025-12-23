@@ -28,27 +28,27 @@ function PecasContent() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [pieceToDelete, setPieceToDelete] = useState<string | null>(null);
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
-    
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'ceramista' || parsedUser.subscriptionStatus !== 'active') {
-      router.push('/');
-      return;
-    }
-    
-    setUser(parsedUser);
-    loadPieces(parsedUser.id);
-  }, [router]);
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
+
+  //   const parsedUser = JSON.parse(userData);
+  //   if (parsedUser.type !== 'ceramista' || parsedUser.subscriptionStatus !== 'active') {
+  //     router.push('/');
+  //     return;
+  //   }
+
+  //   setUser(parsedUser);
+  //   loadPieces(parsedUser.id);
+  // }, [router]);
 
   useEffect(() => {
     const filter = searchParams.get('filter');
     if (filter === 'active') {
-      setFilteredPieces(pieces.filter(p => p.status === 'active'));
+      setFilteredPieces(pieces.filter((p) => p.status === 'active'));
     } else {
       setFilteredPieces(pieces);
     }
@@ -68,13 +68,13 @@ function PecasContent() {
 
   const handleDeleteConfirm = () => {
     if (!pieceToDelete) return;
-    
+
     const allPieces = JSON.parse(localStorage.getItem('atelie_pieces') || '[]');
     const filtered = allPieces.filter((p: Piece) => p.id !== pieceToDelete);
     localStorage.setItem('atelie_pieces', JSON.stringify(filtered));
-    
+
     if (user) loadPieces(user.id);
-    
+
     setDeleteDialogOpen(false);
     setPieceToDelete(null);
   };
@@ -83,8 +83,6 @@ function PecasContent() {
     setDeleteDialogOpen(false);
     setPieceToDelete(null);
   };
-
-  if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
@@ -99,8 +97,8 @@ function PecasContent() {
               <span className="text-xl font-bold">Minhas Peças</span>
             </div>
           </div>
-          
-          <Button 
+
+          <Button
             onClick={() => router.push('/painel/pecas/nova')}
             className="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700"
           >
@@ -123,7 +121,7 @@ function PecasContent() {
               </CardDescription>
             </CardHeader>
             <CardContent className="text-center pb-12">
-              <Button 
+              <Button
                 onClick={() => router.push('/painel/pecas/nova')}
                 className="bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700"
               >
@@ -138,8 +136,8 @@ function PecasContent() {
               <Card key={piece.id} className="hover:shadow-lg transition-shadow">
                 <CardHeader>
                   {piece.photo ? (
-                    <img 
-                      src={piece.photo} 
+                    <img
+                      src={piece.photo}
                       alt={piece.name}
                       className="w-full h-48 object-cover rounded-lg mb-4"
                     />
@@ -148,37 +146,35 @@ function PecasContent() {
                       <Palette className="w-12 h-12 text-orange-300" />
                     </div>
                   )}
-                  
+
                   <div className="space-y-2">
                     <div className="flex items-start justify-between gap-2">
                       <CardTitle className="text-lg">{piece.name}</CardTitle>
                       <Badge variant={piece.status === 'active' ? 'default' : 'secondary'}>
-                        {piece.status === 'active' ? 'Ativa' : piece.status === 'sold' ? 'Vendida' : 'Inativa'}
+                        {piece.status === 'active'
+                          ? 'Ativa'
+                          : piece.status === 'sold'
+                            ? 'Vendida'
+                            : 'Inativa'}
                       </Badge>
                     </div>
-                    
+
                     <CardDescription className="line-clamp-2">
                       {piece.shortDescription}
                     </CardDescription>
                   </div>
                 </CardHeader>
-                
+
                 <CardContent className="space-y-4">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-gray-600">
-                      {AVAILABILITY_LABELS[piece.availability]}
-                    </span>
-                    <span className="font-semibold text-lg">
-                      R$ {piece.price.toFixed(2)}
-                    </span>
+                    <span className="text-gray-600">{AVAILABILITY_LABELS[piece.availability]}</span>
+                    <span className="font-semibold text-lg">R$ {piece.price.toFixed(2)}</span>
                   </div>
-                  
+
                   {piece.availability === 'em_estoque' && (
-                    <div className="text-sm text-gray-600">
-                      Estoque: {piece.quantity} unidades
-                    </div>
+                    <div className="text-sm text-gray-600">Estoque: {piece.quantity} unidades</div>
                   )}
-                  
+
                   <div className="flex gap-2">
                     <Button
                       variant="outline"
@@ -189,7 +185,7 @@ function PecasContent() {
                       <ExternalLink className="w-4 h-4 mr-2" />
                       Ver Página
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -197,7 +193,7 @@ function PecasContent() {
                     >
                       <Edit className="w-4 h-4" />
                     </Button>
-                    
+
                     <Button
                       variant="outline"
                       size="sm"
@@ -239,7 +235,9 @@ function PecasContent() {
 
 export default function PecasPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}>
+    <Suspense
+      fallback={<div className="min-h-screen flex items-center justify-center">Carregando...</div>}
+    >
       <PecasContent />
     </Suspense>
   );

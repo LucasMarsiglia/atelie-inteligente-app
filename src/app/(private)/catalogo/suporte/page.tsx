@@ -7,8 +7,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { ArrowLeft, MessageSquare, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
 
 export default function SuportePage() {
   const router = useRouter();
@@ -22,23 +29,23 @@ export default function SuportePage() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    const parsedUser = JSON.parse(userData);
-    setUser(parsedUser);
-    
-    // Preencher automaticamente nome e email do usuário
-    setFormData(prev => ({
-      ...prev,
-      name: parsedUser.name || '',
-      email: parsedUser.email || '',
-    }));
-  }, [router]);
+  //   const parsedUser = JSON.parse(userData);
+  //   setUser(parsedUser);
+
+  //   // Preencher automaticamente nome e email do usuário
+  //   setFormData(prev => ({
+  //     ...prev,
+  //     name: parsedUser.name || '',
+  //     email: parsedUser.email || '',
+  //   }));
+  // }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,17 +58,17 @@ export default function SuportePage() {
     }, 1000);
   };
 
-  const handleBack = () => {
-    if (user?.type === 'ceramista') {
-      router.push('/painel');
-    } else {
-      router.push('/catalogo');
-    }
-  };
+  // const handleBack = () => {
+  //   if (user?.type === 'ceramista') {
+  //     router.push('/painel');
+  //   } else {
+  //     router.push('/catalogo');
+  //   }
+  // };
 
-  if (!user) {
-    return null;
-  }
+  // if (!user) {
+  //   return null;
+  // }
 
   if (submitted) {
     return (
@@ -73,9 +80,7 @@ export default function SuportePage() {
             <p className="text-gray-600 mb-6">
               Sua mensagem foi enviada com sucesso! Nossa equipe responderá em breve.
             </p>
-            <Button onClick={handleBack} className="w-full">
-              Voltar
-            </Button>
+            <Button className="w-full">Voltar</Button>
           </CardContent>
         </Card>
       </div>
@@ -86,14 +91,10 @@ export default function SuportePage() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <header className="border-b bg-white/80 backdrop-blur-sm sticky top-0 z-50">
         <div className="container mx-auto px-4 py-4">
-          <Button
-            variant="ghost"
-            onClick={handleBack}
-            className="flex items-center gap-2"
-          >
+          <Link href={'/catalogo'} className="flex items-center gap-2">
             <ArrowLeft className="w-4 h-4" />
             Voltar
-          </Button>
+          </Link>
         </div>
       </header>
 
@@ -101,17 +102,13 @@ export default function SuportePage() {
         <div className="mb-8 text-center">
           <MessageSquare className="w-12 h-12 mx-auto mb-4 text-blue-600" />
           <h1 className="text-3xl font-bold mb-2">Suporte / Fale Conosco</h1>
-          <p className="text-gray-600">
-            Envie sua mensagem e nossa equipe responderá em breve
-          </p>
+          <p className="text-gray-600">Envie sua mensagem e nossa equipe responderá em breve</p>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle>Formulário de Contato</CardTitle>
-            <CardDescription>
-              Preencha os campos abaixo para entrar em contato
-            </CardDescription>
+            <CardDescription>Preencha os campos abaixo para entrar em contato</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">

@@ -5,13 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, User, Mail, Lock, LogOut, Trash2, AlertCircle } from 'lucide-react';
 import type { User as UserType } from '@/lib/types';
 
@@ -27,24 +21,24 @@ export default function MinhaContaPage() {
   const [errorMessage, setErrorMessage] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  useEffect(() => {
-    // Verificar autenticação
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   // Verificar autenticação
+  //   // const userData = localStorage.getItem('atelie_user');
+  //   // if (!userData) {
+  //   //   router.push('/');
+  //   //   return;
+  //   // }
 
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'comprador') {
-      router.push('/painel');
-      return;
-    }
+  //   const parsedUser = JSON.parse(userData);
+  //   if (parsedUser.type !== 'comprador') {
+  //     router.push('/painel');
+  //     return;
+  //   }
 
-    setUser(parsedUser);
-    setName(parsedUser.name);
-    setEmail(parsedUser.email);
-  }, [router]);
+  //   setUser(parsedUser);
+  //   setName(parsedUser.name);
+  //   setEmail(parsedUser.email);
+  // }, [router]);
 
   const handleUpdateProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,9 +57,7 @@ export default function MinhaContaPage() {
 
     // Atualizar na lista de usuários
     const allUsers = JSON.parse(localStorage.getItem('atelie_users') || '[]');
-    const updatedUsers = allUsers.map((u: UserType) =>
-      u.id === user.id ? updatedUser : u
-    );
+    const updatedUsers = allUsers.map((u: UserType) => (u.id === user.id ? updatedUser : u));
     localStorage.setItem('atelie_users', JSON.stringify(updatedUsers));
 
     setUser(updatedUser);
@@ -111,9 +103,7 @@ export default function MinhaContaPage() {
     };
 
     // Atualizar na lista de usuários
-    const updatedUsers = allUsers.map((u: UserType) =>
-      u.id === user.id ? updatedUser : u
-    );
+    const updatedUsers = allUsers.map((u: UserType) => (u.id === user.id ? updatedUser : u));
     localStorage.setItem('atelie_users', JSON.stringify(updatedUsers));
 
     // Atualizar usuário atual
@@ -159,10 +149,6 @@ export default function MinhaContaPage() {
     localStorage.removeItem('atelie_user');
     router.push('/');
   };
-
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
@@ -304,8 +290,7 @@ export default function MinhaContaPage() {
             {!showDeleteConfirm ? (
               <>
                 <p className="text-sm text-gray-700">
-                  Ao excluir sua conta, todos os seus dados serão removidos
-                  permanentemente.
+                  Ao excluir sua conta, todos os seus dados serão removidos permanentemente.
                 </p>
                 <Button
                   onClick={() => setShowDeleteConfirm(true)}
@@ -321,12 +306,10 @@ export default function MinhaContaPage() {
                 <div className="flex items-start gap-3">
                   <AlertCircle className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
                   <div>
-                    <h3 className="font-semibold text-orange-900 mb-2">
-                      Tem certeza absoluta?
-                    </h3>
+                    <h3 className="font-semibold text-orange-900 mb-2">Tem certeza absoluta?</h3>
                     <p className="text-sm text-gray-700 mb-3">
-                      Esta ação é <strong>irreversível</strong>. Todos os seus dados,
-                      pedidos e encomendas serão excluídos permanentemente.
+                      Esta ação é <strong>irreversível</strong>. Todos os seus dados, pedidos e
+                      encomendas serão excluídos permanentemente.
                     </p>
                   </div>
                 </div>
