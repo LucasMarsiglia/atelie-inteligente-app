@@ -7,8 +7,25 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, User, Mail, Instagram, MapPin, Edit, Trash2, CreditCard, AlertTriangle } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  ArrowLeft,
+  User,
+  Mail,
+  Instagram,
+  MapPin,
+  Edit,
+  Trash2,
+  CreditCard,
+  AlertTriangle,
+} from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 export default function PerfilCeramistaPage() {
   const router = useRouter();
@@ -23,29 +40,29 @@ export default function PerfilCeramistaPage() {
     cidade: '',
   });
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
-    
-    const parsedUser = JSON.parse(userData);
-    
-    if (parsedUser.type !== 'ceramista') {
-      router.push('/catalogo');
-      return;
-    }
-    
-    setUser(parsedUser);
-    setFormData({
-      name: parsedUser.name || '',
-      email: parsedUser.email || '',
-      bio: parsedUser.bio || '',
-      instagram: parsedUser.instagram || '',
-      cidade: parsedUser.cidade || '',
-    });
-  }, [router]);
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
+
+  //   const parsedUser = JSON.parse(userData);
+
+  //   if (parsedUser.type !== 'ceramista') {
+  //     router.push('/catalogo');
+  //     return;
+  //   }
+
+  //   setUser(parsedUser);
+  //   setFormData({
+  //     name: parsedUser.name || '',
+  //     email: parsedUser.email || '',
+  //     bio: parsedUser.bio || '',
+  //     instagram: parsedUser.instagram || '',
+  //     cidade: parsedUser.cidade || '',
+  //   });
+  // }, [router]);
 
   const handleSave = () => {
     if (!user) return;
@@ -62,17 +79,17 @@ export default function PerfilCeramistaPage() {
 
   const handleDeleteAccount = () => {
     localStorage.removeItem('atelie_user');
-    
+
     // Remover peças do ceramista
     const pieces = JSON.parse(localStorage.getItem('atelie_pieces') || '[]');
     const filteredPieces = pieces.filter((p: any) => p.ceramistaId !== user.id);
     localStorage.setItem('atelie_pieces', JSON.stringify(filteredPieces));
-    
+
     // Remover pedidos do ceramista
     const orders = JSON.parse(localStorage.getItem('atelie_orders') || '[]');
     const filteredOrders = orders.filter((o: any) => o.ceramistaId !== user.id);
     localStorage.setItem('atelie_orders', JSON.stringify(filteredOrders));
-    
+
     window.location.href = '/';
   };
 
@@ -83,11 +100,13 @@ export default function PerfilCeramistaPage() {
     } else if (user?.paymentMethod === 'mercadopago') {
       window.open('https://www.mercadopago.com.br/subscriptions', '_blank');
     } else {
-      alert('Entre em contato com o suporte para cancelar sua assinatura: suporte@atelieinteligente.com');
+      alert(
+        'Entre em contato com o suporte para cancelar sua assinatura: suporte@atelieinteligente.com'
+      );
     }
   };
 
-  if (!user) return null;
+  // if (!user) return null;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
@@ -107,7 +126,9 @@ export default function PerfilCeramistaPage() {
       <main className="container mx-auto px-4 py-8 max-w-3xl">
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">Perfil do Ceramista</h1>
-          <p className="text-gray-600">Gerencie suas informações pessoais e configurações de conta</p>
+          <p className="text-gray-600">
+            Gerencie suas informações pessoais e configurações de conta
+          </p>
         </div>
 
         {/* Informações do Perfil */}
@@ -201,7 +222,10 @@ export default function PerfilCeramistaPage() {
                   <User className="w-5 h-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-600">Nome</p>
-                    <p className="font-medium">{user.name}</p>
+                    <p className="font-medium">
+                      {/* {user.name} */}
+                      Nome{' '}
+                    </p>
                   </div>
                 </div>
 
@@ -209,10 +233,10 @@ export default function PerfilCeramistaPage() {
                   <Mail className="w-5 h-5 text-gray-500" />
                   <div>
                     <p className="text-sm text-gray-600">E-mail</p>
-                    <p className="font-medium">{user.email}</p>
+                    {/* <p className="font-medium">{user.email}</p> */}
                   </div>
                 </div>
-
+                {/* 
                 {user.bio && (
                   <div className="flex items-start gap-3 py-2">
                     <User className="w-5 h-5 text-gray-500 mt-1" />
@@ -222,8 +246,10 @@ export default function PerfilCeramistaPage() {
                     </div>
                   </div>
                 )}
+                 
+                */}
 
-                {user.instagram && (
+                {/* {user.instagram && (
                   <div className="flex items-center gap-3 py-2">
                     <Instagram className="w-5 h-5 text-gray-500" />
                     <div>
@@ -231,9 +257,9 @@ export default function PerfilCeramistaPage() {
                       <p className="font-medium">{user.instagram}</p>
                     </div>
                   </div>
-                )}
+                )} */}
 
-                {user.cidade && (
+                {/* {user.cidade && (
                   <div className="flex items-center gap-3 py-2">
                     <MapPin className="w-5 h-5 text-gray-500" />
                     <div>
@@ -241,7 +267,7 @@ export default function PerfilCeramistaPage() {
                       <p className="font-medium">{user.cidade}</p>
                     </div>
                   </div>
-                )}
+                )} */}
               </>
             )}
           </CardContent>
@@ -250,7 +276,7 @@ export default function PerfilCeramistaPage() {
         {/* Ações da Conta */}
         <div className="space-y-4">
           {/* Cancelar Assinatura */}
-          {user.subscriptionStatus === 'active' && (
+          {'active' === 'active' && (
             <Card className="border-yellow-300 bg-yellow-50/50">
               <CardHeader>
                 <div className="flex items-center gap-3">
@@ -263,7 +289,8 @@ export default function PerfilCeramistaPage() {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-gray-700 mb-4">
-                  Você possui uma assinatura ativa. Ao cancelar, você perderá acesso ao painel do ceramista.
+                  Você possui uma assinatura ativa. Ao cancelar, você perderá acesso ao painel do
+                  ceramista.
                 </p>
                 <Button onClick={handleCancelSubscription} variant="outline" className="w-full">
                   Gerenciar Assinatura
@@ -285,11 +312,12 @@ export default function PerfilCeramistaPage() {
             </CardHeader>
             <CardContent>
               <p className="text-sm text-gray-700 mb-4">
-                Ao excluir sua conta, todas as suas peças, pedidos e dados serão removidos permanentemente.
+                Ao excluir sua conta, todas as suas peças, pedidos e dados serão removidos
+                permanentemente.
               </p>
-              <Button 
-                onClick={() => setShowDeleteDialog(true)} 
-                variant="destructive" 
+              <Button
+                onClick={() => setShowDeleteDialog(true)}
+                variant="destructive"
                 className="w-full"
               >
                 <Trash2 className="w-4 h-4 mr-2" />
@@ -305,7 +333,8 @@ export default function PerfilCeramistaPage() {
             <DialogHeader>
               <DialogTitle>Tem certeza que deseja excluir sua conta?</DialogTitle>
               <DialogDescription>
-                Esta ação é permanente e não pode ser desfeita. Todas as suas peças, pedidos e dados serão removidos.
+                Esta ação é permanente e não pode ser desfeita. Todas as suas peças, pedidos e dados
+                serão removidos.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>

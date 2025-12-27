@@ -7,11 +7,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ArrowLeft, QrCode, Download, MessageSquare, CheckCircle, Settings, Link2, Copy, Users, ExternalLink, Trash2 } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import {
+  ArrowLeft,
+  QrCode,
+  Download,
+  MessageSquare,
+  CheckCircle,
+  Settings,
+  Link2,
+  Copy,
+  Users,
+  ExternalLink,
+  Trash2,
+} from 'lucide-react';
 import { QRCodeCanvas, QRCodeSVG } from 'qrcode.react';
-
 
 export default function ConfiguracoesPage() {
   const router = useRouter();
@@ -24,7 +47,7 @@ export default function ConfiguracoesPage() {
   const [publicLinkCopied, setPublicLinkCopied] = useState(false);
   const [referrals, setReferrals] = useState<any[]>([]);
   const qrRef = useRef<HTMLDivElement>(null);
-  
+
   const [supportForm, setSupportForm] = useState({
     name: '',
     email: '',
@@ -32,39 +55,39 @@ export default function ConfiguracoesPage() {
     message: '',
   });
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    const parsedUser = JSON.parse(userData);
-    
-    // if (parsedUser.type !== 'ceramista') {
-    //   router.push('/catalogo');
-    //   return;
-    // }
-    
-    if (parsedUser.subscriptionStatus !== 'active') {
-      router.push('/assinar');
-      return;
-    }
+  //   const parsedUser = JSON.parse(userData);
 
-    setUser(parsedUser);
-    
-    // Carregar indicações
-    const allReferrals = JSON.parse(localStorage.getItem('atelie_referrals') || '[]');
-    const userReferrals = allReferrals.filter((r: any) => r.influencerId === parsedUser.id);
-    setReferrals(userReferrals);
-    
-    // Preencher dados do usuário no formulário de suporte
-    setSupportForm(prev => ({
-      ...prev,
-      name: parsedUser.name || '',
-      email: parsedUser.email || '',
-    }));
-  }, [router]);
+  //   // if (parsedUser.type !== 'ceramista') {
+  //   //   router.push('/catalogo');
+  //   //   return;
+  //   // }
+
+  //   if (parsedUser.subscriptionStatus !== 'active') {
+  //     router.push('/assinar');
+  //     return;
+  //   }
+
+  //   setUser(parsedUser);
+
+  //   // Carregar indicações
+  //   const allReferrals = JSON.parse(localStorage.getItem('atelie_referrals') || '[]');
+  //   const userReferrals = allReferrals.filter((r: any) => r.influencerId === parsedUser.id);
+  //   setReferrals(userReferrals);
+
+  //   // Preencher dados do usuário no formulário de suporte
+  //   setSupportForm(prev => ({
+  //     ...prev,
+  //     name: parsedUser.name || '',
+  //     email: parsedUser.email || '',
+  //   }));
+  // }, [router]);
 
   const handleDownloadQR = () => {
     const svg = qrRef.current?.querySelector('svg');
@@ -73,10 +96,10 @@ export default function ConfiguracoesPage() {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d');
       const img = new Image();
-      
+
       canvas.width = 300;
       canvas.height = 300;
-      
+
       img.onload = () => {
         ctx?.drawImage(img, 0, 0);
         const url = canvas.toDataURL('image/png');
@@ -85,7 +108,7 @@ export default function ConfiguracoesPage() {
         link.href = url;
         link.click();
       };
-      
+
       img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
     }
   };
@@ -98,12 +121,12 @@ export default function ConfiguracoesPage() {
     setTimeout(() => {
       setSupportLoading(false);
       setSupportSubmitted(true);
-      
+
       // Resetar após 3 segundos
       setTimeout(() => {
         setSupportSubmitted(false);
         setShowSupportDialog(false);
-        setSupportForm(prev => ({
+        setSupportForm((prev) => ({
           ...prev,
           type: '',
           message: '',
@@ -144,15 +167,15 @@ export default function ConfiguracoesPage() {
     // Primeira confirmação
     const confirmed = window.confirm(
       '⚠️ ATENÇÃO: Esta ação é PERMANENTE e NÃO pode ser desfeita.\n\n' +
-      'Ao excluir sua conta, TODOS os seus dados serão removidos:\n' +
-      '• Informações pessoais (nome, e-mail)\n' +
-      '• Todas as suas peças cadastradas\n' +
-      '• Histórico de encomendas recebidas\n' +
-      '• Histórico de vendas\n' +
-      '• Assinatura será cancelada\n\n' +
-      'Deseja realmente continuar?'
+        'Ao excluir sua conta, TODOS os seus dados serão removidos:\n' +
+        '• Informações pessoais (nome, e-mail)\n' +
+        '• Todas as suas peças cadastradas\n' +
+        '• Histórico de encomendas recebidas\n' +
+        '• Histórico de vendas\n' +
+        '• Assinatura será cancelada\n\n' +
+        'Deseja realmente continuar?'
     );
-    
+
     if (!confirmed) return;
 
     // Segunda confirmação
@@ -188,22 +211,21 @@ export default function ConfiguracoesPage() {
 
       // 6. Mostrar mensagem de sucesso
       alert('✅ Conta excluída com sucesso.\n\nVocê será redirecionado para a página inicial.');
-      
+
       // 7. Redirecionar para a página inicial
       window.location.href = '/';
-      
     } catch (error) {
       console.error('Erro ao excluir conta:', error);
-      alert('❌ Erro ao excluir conta. Por favor, tente novamente ou entre em contato com o suporte.');
+      alert(
+        '❌ Erro ao excluir conta. Por favor, tente novamente ou entre em contato com o suporte.'
+      );
     }
   };
 
-  if (!user) {
-    return null;
-  }
-
-  const profileUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/ceramista/${user.id}`;
-  const influencerLink = user.influencerCode ? `${typeof window !== 'undefined' ? window.location.origin : ''}/i/${user.influencerCode}` : '';
+  // const profileUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/ceramista/${user.id}`;
+  // const influencerLink = user.influencerCode
+  //   ? `${typeof window !== 'undefined' ? window.location.origin : ''}/i/${user.influencerCode}`
+  //   : '';
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
@@ -238,9 +260,7 @@ export default function ConfiguracoesPage() {
               </div>
               <div>
                 <CardTitle>Link Público do Ceramista</CardTitle>
-                <CardDescription>
-                  Compartilhe seu perfil público com clientes
-                </CardDescription>
+                <CardDescription>Compartilhe seu perfil público com clientes</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -248,16 +268,8 @@ export default function ConfiguracoesPage() {
             <div className="space-y-2">
               <Label>Seu link público</Label>
               <div className="flex gap-2">
-                <Input
-                  value={profileUrl}
-                  readOnly
-                  className="font-mono text-sm"
-                />
-                <Button
-                  onClick={handleCopyPublicLink}
-                  variant="outline"
-                  className="flex-shrink-0"
-                >
+                {/* <Input value={profileUrl} readOnly className="font-mono text-sm" /> */}
+                <Button onClick={handleCopyPublicLink} variant="outline" className="flex-shrink-0">
                   {publicLinkCopied ? (
                     <>
                       <CheckCircle className="w-4 h-4 mr-2" />
@@ -272,15 +284,12 @@ export default function ConfiguracoesPage() {
                 </Button>
               </div>
               <p className="text-xs text-gray-600">
-                Este é o link direto para seu perfil público. Compartilhe com clientes para que vejam suas peças.
+                Este é o link direto para seu perfil público. Compartilhe com clientes para que
+                vejam suas peças.
               </p>
             </div>
-            
-            <Button
-              onClick={handleOpenPublicLink}
-              variant="outline"
-              className="w-full"
-            >
+
+            <Button onClick={handleOpenPublicLink} variant="outline" className="w-full">
               <ExternalLink className="w-4 h-4 mr-2" />
               Abrir em Nova Aba
             </Button>
@@ -296,9 +305,7 @@ export default function ConfiguracoesPage() {
               </div>
               <div>
                 <CardTitle>Meu Link de Divulgação</CardTitle>
-                <CardDescription>
-                  Compartilhe e acompanhe suas indicações
-                </CardDescription>
+                <CardDescription>Compartilhe e acompanhe suas indicações</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -306,16 +313,8 @@ export default function ConfiguracoesPage() {
             <div className="space-y-2">
               <Label>Seu link personalizado</Label>
               <div className="flex gap-2">
-                <Input
-                  value={influencerLink}
-                  readOnly
-                  className="font-mono text-sm"
-                />
-                <Button
-                  onClick={handleCopyLink}
-                  variant="outline"
-                  className="flex-shrink-0"
-                >
+                {/* <Input value={influencerLink} readOnly className="font-mono text-sm" /> */}
+                <Button onClick={handleCopyLink} variant="outline" className="flex-shrink-0">
                   {linkCopied ? (
                     <>
                       <CheckCircle className="w-4 h-4 mr-2" />
@@ -330,7 +329,8 @@ export default function ConfiguracoesPage() {
                 </Button>
               </div>
               <p className="text-xs text-gray-600">
-                Compartilhe este link nas suas redes sociais. Quando alguém se cadastrar através dele, você poderá acompanhar na seção "Indicações" abaixo.
+                Compartilhe este link nas suas redes sociais. Quando alguém se cadastrar através
+                dele, você poderá acompanhar na seção "Indicações" abaixo.
               </p>
             </div>
 
@@ -340,7 +340,7 @@ export default function ConfiguracoesPage() {
                 <Users className="w-5 h-5 text-orange-600" />
                 <h3 className="font-semibold">Indicações</h3>
               </div>
-              
+
               <div className="bg-gradient-to-r from-orange-50 to-pink-50 rounded-lg p-4 mb-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-orange-600">{referrals.length}</div>
@@ -388,15 +388,14 @@ export default function ConfiguracoesPage() {
               </div>
               <div>
                 <CardTitle>Gerar QR Code</CardTitle>
-                <CardDescription>
-                  Crie um QR Code personalizado para seu perfil
-                </CardDescription>
+                <CardDescription>Crie um QR Code personalizado para seu perfil</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Gere um QR Code que direciona clientes diretamente para seu perfil público no Ateliê Inteligente. Perfeito para cartões de visita, banners e materiais impressos.
+              Gere um QR Code que direciona clientes diretamente para seu perfil público no Ateliê
+              Inteligente. Perfeito para cartões de visita, banners e materiais impressos.
             </p>
             <Button
               onClick={() => setShowQRDialog(true)}
@@ -417,21 +416,16 @@ export default function ConfiguracoesPage() {
               </div>
               <div>
                 <CardTitle>Suporte / Fale Conosco</CardTitle>
-                <CardDescription>
-                  Entre em contato com nossa equipe
-                </CardDescription>
+                <CardDescription>Entre em contato com nossa equipe</CardDescription>
               </div>
             </div>
           </CardHeader>
           <CardContent>
             <p className="text-sm text-gray-600 mb-4">
-              Precisa de ajuda? Tem alguma dúvida ou sugestão? Nossa equipe está pronta para ajudar você.
+              Precisa de ajuda? Tem alguma dúvida ou sugestão? Nossa equipe está pronta para ajudar
+              você.
             </p>
-            <Button
-              onClick={() => setShowSupportDialog(true)}
-              variant="outline"
-              className="w-full"
-            >
+            <Button onClick={() => setShowSupportDialog(true)} variant="outline" className="w-full">
               <MessageSquare className="w-4 h-4 mr-2" />
               Abrir Formulário de Suporte
             </Button>
@@ -450,7 +444,8 @@ export default function ConfiguracoesPage() {
           <CardContent>
             <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
               <p className="text-sm font-semibold text-red-800 mb-2">
-                ⚠️ ATENÇÃO: Ao excluir sua conta, os seguintes dados serão removidos PERMANENTEMENTE:
+                ⚠️ ATENÇÃO: Ao excluir sua conta, os seguintes dados serão removidos
+                PERMANENTEMENTE:
               </p>
               <ul className="text-sm text-red-700 list-disc list-inside space-y-1">
                 <li>Nome, e-mail e dados pessoais</li>
@@ -464,11 +459,7 @@ export default function ConfiguracoesPage() {
                 Esta ação NÃO pode ser revertida. Você não poderá recuperar sua conta ou dados.
               </p>
             </div>
-            <Button
-              onClick={handleDeleteAccount}
-              variant="destructive"
-              className="w-full"
-            >
+            <Button onClick={handleDeleteAccount} variant="destructive" className="w-full">
               <Trash2 className="w-4 h-4 mr-2" />
               Excluir minha conta permanentemente
             </Button>
@@ -486,35 +477,34 @@ export default function ConfiguracoesPage() {
         <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Seu QR Code Personalizado</DialogTitle>
-            <DialogDescription>
-              Escaneie ou baixe para usar em seus materiais
-            </DialogDescription>
+            <DialogDescription>Escaneie ou baixe para usar em seus materiais</DialogDescription>
           </DialogHeader>
-          
+
           <div className="flex flex-col items-center gap-4 py-4">
             {/* QR Code com Logo */}
-            <div 
+            <div
               ref={qrRef}
               className="bg-white p-4 sm:p-6 rounded-2xl shadow-lg border-4 border-orange-500 w-full max-w-[280px] sm:max-w-none"
             >
               <QRCodeSVG
-                value={profileUrl}
+                // value={profileUrl}
                 size={256}
                 level="H"
                 includeMargin={true}
                 className="w-full h-auto"
                 imageSettings={{
-                  src: "/icon.svg",
+                  src: '/icon.svg',
                   height: 48,
                   width: 48,
                   excavate: true,
                 }}
+                value={''}
               />
             </div>
 
             {/* Nome do Ceramista */}
             <div className="text-center">
-              <p className="text-lg font-bold text-gray-900">{user.name}</p>
+              {/* <p className="text-lg font-bold text-gray-900">{user.name}</p> */}
               <p className="text-sm text-gray-600">Ateliê Inteligente</p>
             </div>
 
@@ -527,19 +517,15 @@ export default function ConfiguracoesPage() {
                 <Download className="w-4 h-4 mr-2" />
                 Baixar QR Code (PNG)
               </Button>
-              
-              <Button
-                onClick={() => setShowQRDialog(false)}
-                variant="outline"
-                className="w-full"
-              >
+
+              <Button onClick={() => setShowQRDialog(false)} variant="outline" className="w-full">
                 Fechar
               </Button>
             </div>
 
             <p className="text-xs text-gray-500 text-center break-all px-2">
               O QR Code direciona para: <br />
-              <span className="font-mono text-xs">{profileUrl}</span>
+              {/* <span className="font-mono text-xs">{profileUrl}</span> */}
             </p>
           </div>
         </DialogContent>
@@ -559,9 +545,7 @@ export default function ConfiguracoesPage() {
             <div className="py-8 text-center">
               <CheckCircle className="w-16 h-16 mx-auto mb-4 text-green-600" />
               <h3 className="text-xl font-bold mb-2">Mensagem Enviada!</h3>
-              <p className="text-gray-600">
-                Nossa equipe responderá em breve.
-              </p>
+              <p className="text-gray-600">Nossa equipe responderá em breve.</p>
             </div>
           ) : (
             <form onSubmit={handleSupportSubmit} className="space-y-4">
