@@ -33,29 +33,29 @@ export default function EncomendasRecebidasPage() {
   const [user, setUser] = useState<User | null>(null);
   const [orders, setOrders] = useState<CustomOrder[]>([]);
 
-  useEffect(() => {
-    const userData = localStorage.getItem('atelie_user');
-    if (!userData) {
-      router.push('/');
-      return;
-    }
+  // useEffect(() => {
+  //   const userData = localStorage.getItem('atelie_user');
+  //   if (!userData) {
+  //     router.push('/');
+  //     return;
+  //   }
 
-    const parsedUser = JSON.parse(userData);
-    if (parsedUser.type !== 'ceramista') {
-      router.push('/catalogo');
-      return;
-    }
+  //   const parsedUser = JSON.parse(userData);
+  //   if (parsedUser.type !== 'ceramista') {
+  //     router.push('/catalogo');
+  //     return;
+  //   }
 
-    if (parsedUser.subscriptionStatus !== 'active') {
-      router.push('/assinar');
-      return;
-    }
+  //   if (parsedUser.subscriptionStatus !== 'active') {
+  //     router.push('/assinar');
+  //     return;
+  //   }
 
-    setUser(parsedUser);
+  //   setUser(parsedUser);
 
-    // Carregar todas as encomendas
-    loadOrders();
-  }, [router]);
+  //   // Carregar todas as encomendas
+  //   loadOrders();
+  // }, [router]);
 
   const loadOrders = () => {
     const allOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
@@ -87,10 +87,10 @@ export default function EncomendasRecebidasPage() {
   const handleAcceptOrder = (order: CustomOrder) => {
     const confirmed = window.confirm(
       `✅ Aceitar esta encomenda?\n\n` +
-      `Peça: ${order.pieceName}\n` +
-      `Comprador: ${order.buyerName}\n` +
-      `Quantidade: ${order.quantity}\n\n` +
-      `Ao aceitar, o comprador será notificado e você poderá iniciar a produção.`
+        `Peça: ${order.pieceName}\n` +
+        `Comprador: ${order.buyerName}\n` +
+        `Quantidade: ${order.quantity}\n\n` +
+        `Ao aceitar, o comprador será notificado e você poderá iniciar a produção.`
     );
 
     if (!confirmed) return;
@@ -98,10 +98,8 @@ export default function EncomendasRecebidasPage() {
     try {
       // 1. Atualizar status da encomenda
       const allOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
-      const updatedOrders = allOrders.map((o: CustomOrder) => 
-        o.id === order.id 
-          ? { ...o, status: 'accepted', ceramistaId: user?.id } 
-          : o
+      const updatedOrders = allOrders.map((o: CustomOrder) =>
+        o.id === order.id ? { ...o, status: 'accepted', ceramistaId: user?.id } : o
       );
       localStorage.setItem('atelie_custom_orders', JSON.stringify(updatedOrders));
 
@@ -123,8 +121,9 @@ export default function EncomendasRecebidasPage() {
       loadOrders();
 
       // 4. Mostrar mensagem de sucesso
-      alert('✅ Encomenda aceita com sucesso!\n\nO comprador foi notificado. Você pode conversar com ele no chat.');
-
+      alert(
+        '✅ Encomenda aceita com sucesso!\n\nO comprador foi notificado. Você pode conversar com ele no chat.'
+      );
     } catch (error) {
       console.error('Erro ao aceitar encomenda:', error);
       alert('❌ Erro ao aceitar encomenda. Por favor, tente novamente.');
@@ -135,10 +134,10 @@ export default function EncomendasRecebidasPage() {
   const handleRejectOrder = (order: CustomOrder) => {
     const confirmed = window.confirm(
       `❌ Recusar esta encomenda?\n\n` +
-      `Peça: ${order.pieceName}\n` +
-      `Comprador: ${order.buyerName}\n` +
-      `Quantidade: ${order.quantity}\n\n` +
-      `Ao recusar, o comprador será notificado e a encomenda será marcada como recusada.`
+        `Peça: ${order.pieceName}\n` +
+        `Comprador: ${order.buyerName}\n` +
+        `Quantidade: ${order.quantity}\n\n` +
+        `Ao recusar, o comprador será notificado e a encomenda será marcada como recusada.`
     );
 
     if (!confirmed) return;
@@ -146,10 +145,8 @@ export default function EncomendasRecebidasPage() {
     try {
       // 1. Atualizar status da encomenda
       const allOrders = JSON.parse(localStorage.getItem('atelie_custom_orders') || '[]');
-      const updatedOrders = allOrders.map((o: CustomOrder) => 
-        o.id === order.id 
-          ? { ...o, status: 'rejected', ceramistaId: user?.id } 
-          : o
+      const updatedOrders = allOrders.map((o: CustomOrder) =>
+        o.id === order.id ? { ...o, status: 'rejected', ceramistaId: user?.id } : o
       );
       localStorage.setItem('atelie_custom_orders', JSON.stringify(updatedOrders));
 
@@ -172,16 +169,11 @@ export default function EncomendasRecebidasPage() {
 
       // 4. Mostrar mensagem de sucesso
       alert('✅ Encomenda recusada.\n\nO comprador foi notificado.');
-
     } catch (error) {
       console.error('Erro ao recusar encomenda:', error);
       alert('❌ Erro ao recusar encomenda. Por favor, tente novamente.');
     }
   };
-
-  if (!user) {
-    return null;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 via-white to-pink-50">
@@ -235,7 +227,9 @@ export default function EncomendasRecebidasPage() {
                           Quantidade: {order.quantity} | Recebido em {formatDate(order.createdAt)}
                         </CardDescription>
                       </div>
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium ${statusBadge.class}`}>
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-medium ${statusBadge.class}`}
+                      >
                         {statusBadge.label}
                       </span>
                     </div>
@@ -244,7 +238,9 @@ export default function EncomendasRecebidasPage() {
                     <div className="space-y-4">
                       <div>
                         <h4 className="font-semibold text-sm mb-1">Descrição da Encomenda:</h4>
-                        <p className="text-gray-600 text-sm whitespace-pre-wrap">{order.description}</p>
+                        <p className="text-gray-600 text-sm whitespace-pre-wrap">
+                          {order.description}
+                        </p>
                       </div>
 
                       {order.referenceImage && (
@@ -268,7 +264,7 @@ export default function EncomendasRecebidasPage() {
                             <CheckCircle className="w-4 h-4 mr-2" />
                             Aceitar Encomenda
                           </Button>
-                          
+
                           <Button
                             onClick={() => handleRejectOrder(order)}
                             variant="outline"
@@ -287,7 +283,9 @@ export default function EncomendasRecebidasPage() {
                           className="flex-1 bg-gradient-to-r from-orange-600 to-pink-600 hover:from-orange-700 hover:to-pink-700"
                         >
                           <MessageSquare className="w-4 h-4 mr-2" />
-                          {order.status === 'pending' ? 'Ver Detalhes / Chat' : 'Conversar com Comprador'}
+                          {order.status === 'pending'
+                            ? 'Ver Detalhes / Chat'
+                            : 'Conversar com Comprador'}
                           {unreadMessages > 0 && (
                             <span className="ml-2 px-2 py-0.5 bg-white text-orange-600 rounded-full text-xs font-bold">
                               {unreadMessages}

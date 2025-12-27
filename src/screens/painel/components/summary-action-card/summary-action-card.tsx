@@ -3,6 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Link2, Package, Plus, ShoppingCart } from 'lucide-react';
+import Link from 'next/link';
 
 export const actionCards = [
   {
@@ -32,8 +33,16 @@ export const actionCards = [
     ),
     render: () => (
       <div className="grid gap-2 w-full">
-        <Button variant="outline">Ver Todos os Pedidos</Button>
-        <Button variant="outline">Ver Todas as Encomendas</Button>
+        <Link href="/painel/pedidos">
+          <Button variant="outline" className="w-full">
+            Ver Todos os Pedidos
+          </Button>
+        </Link>
+        <Link href="/painel/encomendas">
+          <Button variant="outline" className="w-full">
+            Ver Todas as Encomendas
+          </Button>
+        </Link>
       </div>
     ),
   },
